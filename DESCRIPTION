@@ -1,0 +1,23 @@
+Package: mseviz
+Title: Plots and Visualization Tools for Management Strategy Evaluation Results
+Version: 0.0.1
+Date: 2018-01-26
+Authors@R: c(person(given = "Iago", family = "Mosqueira", role = c("aut", "cre"),
+  email = "iago.mosqueira@ec.europa.eu"))
+Description: A set of plots and visualization tools to explore and present the
+  results of Management Strategy Evaluation (MSE) analyses.
+Depends:
+  ggplot2,
+  data.table
+Imports:
+  ggstance
+Suggests:
+  testthat,
+  knitr,
+  rmarkdown
+VignetteBuilder: knitr
+License: file LICENSE
+LazyLoad: Yes
+LazyData: No
+BugReports: https://github.com/iagomosqueira/mseviz/issues
+RoxygenNote: 6.0.0
