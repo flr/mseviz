@@ -1,5 +1,7 @@
 import("ggplot2")
 import("data.table")
+importFrom("stats", "quantile")
+importFrom("utils", "data")
 importFrom("ggstance",
   "geom_linerangeh")
 exportPattern("^[^\\.]")

@@ -21,7 +21,6 @@
 #'   target=list(S3=1), limit=c(S3=0.2))
 #' plotBPs(perf, target=list(S3=1), limit=c(S3=0.2))
 
-
 plotBPs <- function(data, indicators=c("S3", "S6", "F2", "Y1", "T1"),
   target=missing, limit=missing) {
 
@@ -103,81 +102,105 @@ plotTOs <- function(data, x="Y1", y=c("S3", "S6", "F2", "T1"),
 }
 # }}}
 
-# plotKobe {{{
+# kobeMPs {{{
 
-plotKobe <- function(data, x="S3", y="S6", year=max(data$year), alpha=1, size=0.75, colkey="mp") {
-  
-  # HACK: scoping issue in data.table due to match arg & col names
-  ye <- year
-  
-  dat <- data[indicator %in% c(x, y),][year %in% ye,]
-  names <- unique(dat[indicator %in% c(x, y), name])
-  
-  # TURN run and mp (if it exists) into character
-  dat[, 'run' := lapply(.SD, as.character), .SDcols='run']
-  dat[, mp := lapply(.SD, as.character), .SDcols='mp']
+#' @examples
+#' kobeMPs(perf)
 
-  dat <- dcast(dat, year + run + mp ~ indicator, sep="",
-    value.var=c('10%','25%','50%','75%','90%'))
+kobeMPs <- function(data, x="S3", y="S6", xlim=0.40, ylim=1.4,
+  probs=c(0.10, 0.50, 0.90), size=0.75, alpha=1) {
   
-  p <- ggplot(dat, aes_q(x=as.name(paste0("50%", x)),
-    y=as.name(paste0("50%", y)), group=as.name(colkey))) +
-    # KOBE
+  # CALCULATE quantiles
+  data <- data[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
+    keyby=list(indicator, name, year, mp)]
+
+  # SUBSET indicators
+  daty <- data[indicator %in% y,]
+  setnames(daty, seq(5, 4 + length(probs)), paste0("y", paste0(probs*100, "%")))
+  datx <- data[indicator %in% x,]
+  setnames(datx, seq(5, 4 + length(probs)), paste0("x", paste0(probs*100, "%")))
+  
+  # MERGE x into y
+  data <- cbind(daty, datx[,-(1:4)])
+
+  # PLOT
+  p <-ggplot(data, aes(x=`x50%`, y=`y50%`)) +
+    # Kobe background
     geom_rect(aes(xmin=1, xmax=Inf, ymin=0, ymax=1), colour='green', fill='green') +
     geom_rect(aes(xmin=0, xmax=1, ymin=0, ymax=1), colour='yellow', fill='yellow') +
     geom_rect(aes(xmin=1, xmax=Inf, ymin=1, ymax=Inf), colour='orange', fill='orange') +
     geom_rect(aes(xmin=0, xmax=1, ymin=1, ymax=Inf), colour='red', fill='red') +
-    # vertical lines
-    geom_linerange(aes_q(ymin=as.name(paste0("10%", y)),
-      ymax=as.name(paste0("90%", y))), size=size, alpha=alpha) +
-  #  geom_linerange(aes_q(ymin=as.name(paste0("25%", y)),
-  #    ymax=as.name(paste0("75%", y))), size=1, alpha=alpha) +
-    # horizontal lines
-    ggstance::geom_linerangeh(aes_q(xmin=as.name(paste0("10%", x)),
-      xmax=as.name(paste0("90%", x))), size=size, alpha=alpha) +
-  #  ggstance::geom_linerangeh(aes_q(xmin=as.name(paste0("25%", x)),
-  #    xmax=as.name(paste0("75%", x))), size=1, alpha=alpha) +
-    # 50% point
-    geom_point(aes_q(fill=as.name(colkey)), shape=21, size=4) + scale_shape(solid=FALSE) +
-    xlab("SB/SBMSY") +
-    ylab("F/FMSY") +
-    scale_x_continuous(limits = c(0, max(dat$`90%S3`)), expand = c(0, 0)) +
-    scale_y_continuous(limits = c(0, max(dat$`90%S5`)), expand = c(0, 0))
+    # Central GRID
+    geom_hline(aes(yintercept=1)) + geom_vline(aes(xintercept=1)) +
+    # lims
+    scale_x_continuous(expand = c(0, 0),limits = c(0, 2)) +
+    scale_y_continuous(expand = c(0, 0),limits = c(0, 2)) +
+    # DROP background grid
+    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+      panel.background = element_blank(), axis.line = element_blank()) +
+    # PLOT lines
+    geom_linerange(aes(ymin=`y10%`, ymax=`y90%`), size=size, alpha=alpha) +
+    geom_linerangeh(aes(xmin=`x10%`, xmax=`x90%`), size=size, alpha=alpha) +
+    # PLOT median dots
+    geom_point(aes(fill=mp), shape=21, size=4) +
+    scale_shape(solid=FALSE) + theme(legend.title=element_blank()) +
+    # PLOT LRPs
+    geom_segment(aes(x=xlim, xend=2, y=ylim, yend=ylim)) +
+    geom_segment(aes(x=xlim, xend=xlim, y=0, yend=ylim)) +
+    # LABELS
+    labs(x=expression(SB/SB[MSY]), y=expression(F/F[MSY])) +
+    annotate("text", x = 0.25, y = 0.1, label = "SB[lim]", parse=TRUE) +
+    annotate("text", x = 0.85, y = 0.1, label = "SB[targ]", parse=TRUE) +
+    annotate("text", x = 1.85, y = 1.5, label = "F[lim]", parse=TRUE) +
+    annotate("text", x = 1.85, y = 1.1, label = "F[targ]", parse=TRUE)
+
+  return(p)
+} # }}}
+
+# plotOMruns {{{
+
+#' @examples
+#' data(omruns)
+#' plotOMruns(om[qname=="F",], runs[qname=="F",], limit=0.8, target=0.4)
+#' plotOMruns(om[qname=="C",], runs[qname=="C",])
+
+plotOMruns <- function(om, runs, limit=missing, target=missing,
+  probs=c(0.10, 0.25, 0.50, 0.75, 0.90)) {
   
-  return(p + theme(legend.position="none"))
-}
-# }}}
-
-# plotOMR {{{
-plotOMruns <- function(om, runs, refpts, qname="ssb",
-  ylab=paste0(toupper(qname), " (", units(qua), ")")) {
-
-  # GET element, slot or method
-  foo <- get(qname)
-  
-
-  if(!missing(refpts)) {
-    qua <- foo(om) %/% refpts
-    quas <- lapply(runs, function(x) foo(x) %/% refpts)
+  # COMPUTE om quantiles
+  if("iter" %in% colnames(om) && length(unique(om$iter)) > 1) {
+    om <- om[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
+    keyby=list(year)]
   } else {
-    qua <- foo(om)
-    quas <- lapply(runs, foo)
+    om[, `50%`:=data]
   }
 
-  if(qname == "fbar") {
-    quas <- lapply(quas, function(x) {x[x > 1.5] <- 1.5; return(x)})
-  }
+  # PLOT om
+  p1 <- ggplot(om, aes(x=year, y=`50%`)) + geom_line() +
+    ylab("") + xlab("")
+  # RPs
+  if(!missing(limit))
+    p1 <- p1 + geom_hline(aes(yintercept=limit), colour="red", linetype=2)
+  if(!missing(target))
+    p1 <- p1 + geom_hline(aes(yintercept=target), colour="green", linetype=2)
 
-  p1 <- plot(qua) + ylab(ylab) +
-    geom_vline(xintercept=as.numeric(ISOdate(dims(qua)$maxyear,1,1)), linetype=2, colour='darkgrey')
+  # COMPUTE runs quantiles
+  runs <- runs[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
+    keyby=list(year, mp)]
 
-  p2 <- plot(quas) + facet_wrap(~qname) + ylab(ylab) +
-    geom_vline(xintercept=as.numeric(ISOdate(dims(qua)$maxyear,1,1)), linetype=2, colour='darkgrey')
-
-  if(!missing(refpts)) {
-    p1 <- p1 + geom_hline(aes(yintercept=1), linetype=2) 
-    p2 <- p2 + geom_hline(aes(yintercept=1), linetype=2) 
-  }
+  # PLOT runs
+  p2 <- ggplot(runs, aes(x=year)) +
+    # QUANTILES
+    geom_ribbon(aes(ymin=`10%`, ymax=`90%`), fill="red", alpha=0.15) +
+    geom_ribbon(aes(ymin=`25%`, ymax=`75%`), fill="red", alpha=0.30) +
+    # MEDIAN
+    geom_line(aes(y=`50%`)) +
+    facet_wrap(~mp, ncol=2)
+    # RPs
+    if(!missing(limit))
+      p2 <- p2 + geom_hline(aes(yintercept=limit), colour="red", linetype=2)
+    if(!missing(target))
+      p2 <- p2 + geom_hline(aes(yintercept=target), colour="green", linetype=2)
 
   # TODO DO with grid.arrange
   grid::pushViewport(grid::viewport(layout = grid::grid.layout(4, 2)))

@@ -1,0 +1,112 @@
+---
+title: Standardized Plots for Presentation of MSE Results in IOTC
+author: Iago Mosqueira (EC JRC) <iago.mosqueira@ec.europa.eu>
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+tags:
+abstract:
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{Standardized Plots for Presentation of MSE Results in IOTC}
+  %\usepackage[UTF-8]{inputenc}
+---
+
+license: Creative Commons Attribution-ShareAlike 4.0 International Public License
+---
+
+```{r, start, echo=FALSE, message=FALSE}
+library(knitr)
+opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE,
+  fig.width=5, fig.height=3, fig.pos='H')
+```
+
+```{r pkgs}
+library(mseviz)
+```
+
+# Inputs
+
+```{r data}
+data(perf)
+data(omruns)
+```
+
+## Performance levels across MPs
+
+These are the necessary columns in the performance `data.frame`
+
+- *indicator*, indicator code
+- *year*
+- *data*, computed value
+- *iter*, iteration number
+- *name*, indicator name
+- *mp*, MP name
+
+```{r perf}
+perf
+```
+
+## Time series of results of MP runs
+
+- *mp*, MP name
+- *year*
+- *data*, computed value
+- *iter*, iteration number
+- *qname*, computed metric, e.g. Catch (C), mean F (F)
+
+```{r runs}
+runs
+```
+
+## Time series of OM history
+
+- *year*
+- *data*, computed value
+- *iter*, iteration number
+- *qname*, computed metric, e.g. Catch (C), mean F (F)
+
+```{r om}
+om
+```
+
+# Standard IOTC MSE plots
+
+## plotBPs, indicators boxplots
+
+```{r plotbps}
+plotBPs(perf, indicators=c("T1", "S6", "F2", "Y1", "S3"))
+```
+
+## plotTOs, trade-off plots
+
+```{r plottos}
+plotTOs(perf, x="Y1", y=c("S3", "S6", "F2", "T1"))
+```
+
+## kobeMPs, performance on Kobe plot
+
+```{r kobemps}
+kobeMPs(perf)
+```
+
+## kobe2MPs,
+
+## plotOMruns, time series of OM and MPs
+
+```{r plotomrunsf}
+data(omruns)
+plotOMruns(om[qname=="F",], runs[qname=="F",], limit=0.8, target=0.4)
+```
+
+```{r plotomrunsc}
+plotOMruns(om[qname=="C",], runs[qname=="C",])
+```
+
+# IOTC MSE output tables
+
+## perftable
+
+## fullperftable
+
+
+# References
