@@ -202,8 +202,8 @@ plotOMruns <- function(om, runs, limit=missing, target=missing,
     if(!missing(target))
       p2 <- p2 + geom_hline(aes(yintercept=target), colour="green", linetype=2)
 
-  # TODO DO with grid.arrange
   grid::pushViewport(grid::viewport(layout = grid::grid.layout(4, 2)))
+
   vplayout <- function(x, y) grid::viewport(layout.pos.row = x, layout.pos.col = y)
   print(p1, vp = vplayout(1, 1:2))
   print(p2, vp = vplayout(2:4, 1:2))
