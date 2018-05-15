@@ -163,7 +163,7 @@ kobeMPs <- function(data, x="S3", y="S6", xlim=0.40, ylim=1.4,
 
 # kobeTS {{{
 
-kobeTS <- function(om, runs, runs, x="S3", y="S6", xlim=0.40, ylim=1.4,
+kobeTS <- function(om, runs, x="S3", y="S6", xlim=0.40, ylim=1.4,
   probs=c(0.10, 0.50, 0.90), size=0.75, alpha=1) {
 
   om[, indicator:=factor(indicator, levels=c("green", "yellow", "orange", "red"))]
