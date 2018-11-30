@@ -95,11 +95,12 @@ kobeMPs(perf)
 
 ```{r plotomrunsf}
 data(omruns)
-plotOMruns(om[qname=="F",], runs[qname=="F",], limit=0.8, target=0.4)
+#plotOMruns(om[qname=="F",], runs[qname=="F",], limit=0.8, target=0.4)
 ```
 
 ```{r plotomrunsc}
-plotOMruns(om[qname=="C",], runs[qname=="C",])
+plot(9)
+#plotOMruns(om[qname=="C",], runs[qname=="C",])
 ```
 
 # IOTC MSE output tables

@@ -6,7 +6,6 @@
 #
 # Distributed under the terms of the European Union Public Licence (EUPL) V.1.1.
 
-
 # TODO final table
 # mean(performance) for 1, 5, 10, 20 years
 
@@ -15,6 +14,18 @@
 # - CONVERT 0 to < 0.01
 # - CONVERT 1 to > 0.99
 
+foo <- function(expr) {
+
+ # CHANGE [] to  _{}
+ expr <- gsub("[", "_{", expr, fixed=TRUE)
+ expr <- gsub("]", "}", expr, fixed=TRUE)
+ expr <- gsub("hat\\((.*)\\)", "\\\\hat{\\1}", expr)
+ # expr <- gsub("<=", "\\\\leq", expr, fixed=TRUE)
+ # expr <- gsub(">=", "\\\\geq", expr, fixed=TRUE)
+ # expr <- gsub("%*%", "\\\\dot", expr, fixed=TRUE)
+ return(paste0("$", expr, "$"))
+}
+
 # summTable {{{
 
 summTable <- function(data,  indicators=c("S3", "S6", "F2", "Y1", "T2"),
@@ -22,15 +33,18 @@ summTable <- function(data,  indicators=c("S3", "S6", "F2", "Y1", "T2"),
 
   # SUBSET indicators
   data <- data[indicator %in% indicators,]
-  
+
+  # CONVERT name to LaTeX
+  data[, name:=foo(name)]
+
   # CALCULATE quantiles
   qdata <- data[,as.list(quantile(data, probs=probs, na.rm=TRUE)),
     keyby=list(indicator, name, mp)]
   
-  qdata[, fig:=paste0(format(`50%`, digits=2, scientific=FALSE, trim=TRUE), " (",
-    format(`10%`, digits=2, scientific=FALSE, trim=TRUE), "-",
-    format(`90%`, digits=2, scientific=FALSE, trim=TRUE), ")")]
-  
+  qdata[, fig:=paste0(format(`50%`, digits=1, scientific=FALSE, trim=TRUE), " (",
+    format(round(`10%`, 2), digits=1, trim=TRUE, scientific=FALSE), "-",
+    format(round(`90%`, 2), digits=1, trim=TRUE, scientific=FALSE), ")")]
+ 
   qtab <- dcast(qdata, mp ~ name, value.var = "fig")
   
   # CALCULATE means
@@ -51,13 +65,6 @@ summTable <- function(data,  indicators=c("S3", "S6", "F2", "Y1", "T2"),
   # COLOUR by rank
   colours <- c(rep("000000", 2), rep("343434", 4), rep("665544", 2))
   
-  #for(i in seq(dim(tab)[1])) {
-  #  for(j in seq(2, dim(tab)[2])) {
-  #    tab[i, j] <- paste0("\\cellcolor[HTML]{",
-  #    colours[unlist(qrank[i, j, with=FALSE])], "}{", tab[i, j, with=FALSE], "}")
-  #  }
-  #}
-  
   # OUTPUT table
   return(xtable(tab, ...))
 
@@ -67,19 +74,23 @@ summTable <- function(data,  indicators=c("S3", "S6", "F2", "Y1", "T2"),
 # data <- perft[year == 2023]
 # desc <- Reduce(rbind,lapply(indicators, function(x) as.data.frame(x[2:3])))
 
-resTable <- function(data, desc=desc, ...) {
+resTable <- function(data, indicators, ...) {
 
-  # COMPUTE median by indicator & mp
-  mdat <- data[, .(data=median(data)), by=.(indicator, mp, name)]
+  desc <- Reduce(rbind, lapply(indicators, function(x) as.data.frame(x[2:3])))
 
-  # MERGE indicators decsription
+  # COMPUTE mean by indicator & mp
+  mdat <- data[, .(data=mean(data)), by=.(indicator, mp, name)]
+
+  # MERGE indicators description
   tdat <- merge(mdat, desc, by.x='name', by.y='name')
-  #tdat[indicator == "F1", name] <- "P(SB>0.20SB0)"
+  
   tab <- dcast(tdat, desc + name ~ mp, value.var = "data")
-  # FORMAT zeroes
-  tab[tab == 0] <- NA
-  # BUG
-  tab[15,2] <- "P(SB>0.20SB0)"
 
+  # CONVERT name to LaTeX
+  tab[, name:=foo(name)]
+  
+  # FORMAT zeroes
+  # tab[tab == 0] <- NA
+  
   xtable(tab, ...)
 } # }}}
