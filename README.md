@@ -1,6 +1,6 @@
 # mseviz
-- Version: 0.2.0
-- Date: 2018-11-27
+- Version: 0.2.1
+- Date: 2019-03-15
 - Author: Iago Mosqueira, EC JRC.
 - Maintainer: Iago Mosqueira, EC JRC.
 - Repository: <https://github.com/iagomosqueira/mseviz/>

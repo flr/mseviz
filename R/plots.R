@@ -21,12 +21,17 @@ plotBPs <- function(data, indicators=c("S3", "S6", "F2", "Y1", "T1"),
   data[, name:=factor(name, levels=cols$name[match(cols$indicator, indicators)],
     ordered=TRUE)]
 
+  dat <- data[, .(ymin=quantile(data, 0.05), lower=quantile(data, 0.25),
+    middle=mean(data), upper=quantile(data, 0.75),
+    ymax=quantile(data, 0.95)), by=.(mp, indicator, name)]
+
   # PLOT
-  p <- ggplot(data,
+  p <- ggplot(dat,
+    aes(x=mp, ymin=ymin, lower=lower, middle=middle, upper=upper, ymax=ymax,
+      fill=mp)) +
     # data ~ mp, colour by mp
-    aes(x=mp, y=data, colour=mp)) +
     # PLOT boxplot by mp
-    geom_boxplot(outlier.shape = NA, aes(fill=mp), colour="black") +
+    geom_boxplot(stat="identity") +
     # PANELS per indicators
     facet_wrap(~name, scales='free_y') +
     xlab("") + ylab("") +
@@ -137,8 +142,8 @@ kobeMPs <- function(data, x="S3", y="S5", xlim=0.40, ylim=1.4,
     geom_point(aes(fill=mp), shape=21, size=4) +
     scale_shape(solid=FALSE) + theme(legend.title=element_blank()) +
     # PLOT LRPs
-    geom_segment(aes(x=xlim, xend=Inf, y=ylim, yend=ylim)) +
-    geom_segment(aes(x=xlim, xend=xlim, y=0, yend=ylim)) +
+    geom_segment(aes(x=xlim, xend=Inf, y=ylim, yend=ylim), colour='white') +
+    geom_segment(aes(x=xlim, xend=xlim, y=0, yend=ylim), colour='white') +
     # LABELS
     labs(x=expression(SB/SB[MSY]), y=expression(F/F[MSY])) +
     annotate("text", x = xlim - xlim * 0.35, y = 0.1,
@@ -163,14 +168,14 @@ kobeTS <- function(perfts) {
       values=c(green="darkgreen", red="red", yellow="yellow2", orange="orange")) +
     facet_wrap(~mp) +
     xlab("") + ylab("") +
-    theme(axis.text.x=element_blank(), legend.position=c(.85,.15))
+    theme(legend.position=c(.85,.15))
 
 } # }}}
 
 # plotOMruns {{{
 
 plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
-  probs=c(0.10, 0.25, 0.50, 0.75, 0.90), iyear=dims(om)$maxyear, ylab="") {
+  probs=c(0.10, 0.25, 0.50, 0.75, 0.90), iyear=dims(om)$maxyear, ylab="", ylim=missing) {
 
   # CHECK classses
   if(!is(om, "FLQuant") | !is(runs, "FLQuants"))
@@ -194,6 +199,9 @@ plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
     p2 <- p2 + geom_hline(aes(yintercept=limit), colour="red", linetype=2)
   if(!missing(target))
     p2 <- p2 + geom_hline(aes(yintercept=target), colour="green", linetype=2)
+
+  if(!missing(ylim))
+    p2 <- p2 + ylim(ylim)
 
   # TODO Same limits for p1 and p2
   # TODO MATCH scale and panel size OM vs. runs in plotOMruns
