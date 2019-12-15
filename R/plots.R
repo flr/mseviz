@@ -11,7 +11,7 @@
 #' Boxplot by MP for a range of indicators
 #' Figure 3
 
-plotBPs <- function(data, indicators=c("S3", "S6", "F2", "Y1", "T1"),
+plotBPs <- function(data, indicators=unique(data$indicator),
   target=missing, limit=missing) {
 
   # SUBSET indicators
@@ -21,9 +21,9 @@ plotBPs <- function(data, indicators=c("S3", "S6", "F2", "Y1", "T1"),
   data[, name:=factor(name, levels=cols$name[match(cols$indicator, indicators)],
     ordered=TRUE)]
 
-  dat <- data[, .(ymin=quantile(data, 0.05), lower=quantile(data, 0.25),
-    middle=mean(data), upper=quantile(data, 0.75),
-    ymax=quantile(data, 0.95)), by=.(mp, indicator, name)]
+  dat <- data[, .(ymin=quantile(data, 0.10), lower=quantile(data, 0.25),
+    middle=median(data), upper=quantile(data, 0.75),
+    ymax=quantile(data, 0.90)), by=.(mp, indicator, name)]
 
   # PLOT
   p <- ggplot(dat,
@@ -37,7 +37,7 @@ plotBPs <- function(data, indicators=c("S3", "S6", "F2", "Y1", "T1"),
     xlab("") + ylab("") +
     # DELETE x-axis labels, LEGEND in 6th panel
     # TODO legend pos by no. of panels
-    theme(axis.text.x=element_blank(), legend.position=c(.85,.15),
+    theme(axis.text.x=element_blank(), legend.position=c("right"),
     # DELETE legend title
     legend.title=element_blank())
 
@@ -68,7 +68,7 @@ plotBPs <- function(data, indicators=c("S3", "S6", "F2", "Y1", "T1"),
 #' data(perf)
 #' plotTOs(perf)
 
-plotTOs <- function(data, x="Y1", y=c("S3", "S6", "F2", "T2"),
+plotTOs <- function(data, x=unique(data$indicator)[1], y=unique(data$indicator)[-1],
   probs=c(0.10, 0.50, 0.90), size=0.50, alpha=0.75) {
 
   # CALCULATE quantiles
@@ -123,10 +123,14 @@ kobeMPs <- function(data, x="S3", y="S5", xlim=0.40, ylim=1.4,
   # PLOT
   p <- ggplot(data, aes(x=`x50%`, y=`y50%`)) +
     # Kobe background
-    geom_rect(aes(xmin=1, xmax=Inf, ymin=0, ymax=1), colour='green', fill='green') +
-    geom_rect(aes(xmin=0, xmax=1, ymin=0, ymax=1), colour='yellow', fill='yellow') +
-    geom_rect(aes(xmin=1, xmax=Inf, ymin=1, ymax=Inf), colour='orange', fill='orange') +
-    geom_rect(aes(xmin=0, xmax=1, ymin=1, ymax=Inf), colour='red', fill='red') +
+    geom_rect(aes(xmin=1, xmax=Inf, ymin=0, ymax=1), colour='green',
+      fill='green') +
+    geom_rect(aes(xmin=0, xmax=1, ymin=0, ymax=1), colour='yellow',
+      fill='yellow') +
+    geom_rect(aes(xmin=1, xmax=Inf, ymin=1, ymax=Inf), colour='orange', 
+      fill='orange') +
+    geom_rect(aes(xmin=0, xmax=1, ymin=1, ymax=Inf), colour='red',
+      fill='red') +
     # Central GRID
     geom_hline(aes(yintercept=1)) + geom_vline(aes(xintercept=1)) +
     # lims
@@ -135,15 +139,15 @@ kobeMPs <- function(data, x="S3", y="S5", xlim=0.40, ylim=1.4,
     # DROP background grid
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
       panel.background = element_blank(), axis.line = element_blank()) +
+    # PLOT LRPs
+    geom_segment(aes(x=xlim, xend=Inf, y=ylim, yend=ylim), colour='gray') +
+    geom_segment(aes(x=xlim, xend=xlim, y=0, yend=ylim), colour='gray') +
     # PLOT lines
     geom_linerange(aes(ymin=`y10%`, ymax=`y90%`), size=size, alpha=alpha) +
     geom_linerangeh(aes(xmin=`x10%`, xmax=`x90%`), size=size, alpha=alpha) +
     # PLOT median dots
     geom_point(aes(fill=mp), shape=21, size=4) +
     scale_shape(solid=FALSE) + theme(legend.title=element_blank()) +
-    # PLOT LRPs
-    geom_segment(aes(x=xlim, xend=Inf, y=ylim, yend=ylim), colour='white') +
-    geom_segment(aes(x=xlim, xend=xlim, y=0, yend=ylim), colour='white') +
     # LABELS
     labs(x=expression(SB/SB[MSY]), y=expression(F/F[MSY])) +
     annotate("text", x = xlim - xlim * 0.35, y = 0.1,
@@ -182,7 +186,7 @@ plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
     stop("om and runs must be of class FLQuant and FLQuants respectively.")
  
   # PLOT om
-  p1 <- plot(om, probs=probs, iter=iter) + xlim(NA, iyear + 1) +
+  p1 <- plot(om, probs=probs) + xlim(NA, iyear + 1) +
     geom_vline(xintercept=iyear)
 
   # RPs
@@ -191,8 +195,8 @@ plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
   if(!missing(target))
     p1 <- p1 + geom_hline(aes(yintercept=target), colour="green", linetype=2)
 
-  p2 <- plot(runs, probs=probs, iter=iter) + facet_wrap(~qname, ncol=2) + ylab(ylab) +
-    geom_vline(xintercept=iyear)
+  p2 <- plot(runs, probs=probs, iter=iter) + facet_wrap(~qname,
+    ncol=2) + ylab(ylab) + geom_vline(xintercept=iyear)
 
   # RPs
   if(!missing(limit))
@@ -203,13 +207,8 @@ plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
   if(!missing(ylim))
     p2 <- p2 + ylim(ylim)
 
-  # TODO Same limits for p1 and p2
-  # TODO MATCH scale and panel size OM vs. runs in plotOMruns
-  grid::pushViewport(grid::viewport(layout = grid::grid.layout(4, 2)))
+  p <- p1 + p2 + plot_layout(ncol=1, heights=c(1, length(runs) / 2))
 
-  vplayout <- function(x, y) grid::viewport(layout.pos.row = x, layout.pos.col = y)
-  print(p1, vp = vplayout(1, 1:2))
-  print(p2, vp = vplayout(2:4, 1:2))
+  return(p)
 
-  invisible()
 } # }}}

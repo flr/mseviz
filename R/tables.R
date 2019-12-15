@@ -28,7 +28,7 @@ foo <- function(expr) {
 
 # summTable {{{
 
-summTable <- function(data,  indicators=c("S3", "S6", "F2", "Y1", "T2"),
+summTable <- function(data,  indicators=unique(data[['indicator']]),
   probs=c(0.10, 0.50, 0.90), ...) {
 
   # SUBSET indicators
@@ -41,7 +41,8 @@ summTable <- function(data,  indicators=c("S3", "S6", "F2", "Y1", "T2"),
   qdata <- data[,as.list(quantile(data, probs=probs, na.rm=TRUE)),
     keyby=list(indicator, name, mp)]
   
-  qdata[, fig:=paste0(format(`50%`, digits=1, scientific=FALSE, trim=TRUE), " (",
+  qdata[, fig:=paste0(
+    format(round(`50%`, 2), digits=1, scientific=FALSE, trim=TRUE), " (",
     format(round(`10%`, 2), digits=1, trim=TRUE, scientific=FALSE), "-",
     format(round(`90%`, 2), digits=1, trim=TRUE, scientific=FALSE), ")")]
  
@@ -74,7 +75,7 @@ summTable <- function(data,  indicators=c("S3", "S6", "F2", "Y1", "T2"),
 # data <- perft[year == 2023]
 # desc <- Reduce(rbind,lapply(indicators, function(x) as.data.frame(x[2:3])))
 
-resTable <- function(data, indicators, ...) {
+resTable <- function(data, indicators=unique(data[['indicator']]), ...) {
 
   desc <- Reduce(rbind, lapply(indicators, function(x) as.data.frame(x[2:3])))
 

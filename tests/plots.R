@@ -14,7 +14,7 @@ data(perf)
 
 # 1. Boxplots
 
-plotBPs(perf) + coord_fixed(ratio=4/4)
-plotBPs(perf, target=c(S3=1)) + coord_fixed(ratio=4/4)
+plotBPs(perf)
+plotBPs(perf, target=c(S3=1))
 
 # 2. 

@@ -1,6 +1,7 @@
 import("ggplot2")
 import("data.table")
 import("xtable")
+import("patchwork")
 importFrom("stats", "quantile")
 importFrom("utils", "data")
 importFrom("ggstance",
