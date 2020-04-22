@@ -12,18 +12,23 @@
 #' Figure 3
 
 plotBPs <- function(data, indicators=unique(data$indicator),
-  target=missing, limit=missing) {
+  target=missing, limit=missing, yminmax=c(0.10, 0.90), lowupp=c(0.25, 0.75)) {
+
+  # CHECK quantiles
+  if(any(c(length(yminmax), length(lowupp)) != 2))
+    stop("'yminmax' and 'lowupp' must be both of length 2")
 
   # SUBSET indicators
   data <- data[indicator %in% indicators,]
+  
   # ORDER name as of indicators
   cols <- unique(data[,c('indicator','name')])
   data[, name:=factor(name, levels=cols$name[match(cols$indicator, indicators)],
     ordered=TRUE)]
 
-  dat <- data[, .(ymin=quantile(data, 0.10), lower=quantile(data, 0.25),
-    middle=median(data), upper=quantile(data, 0.75),
-    ymax=quantile(data, 0.90)), by=.(mp, indicator, name)]
+  dat <- data[, .(ymin=quantile(data, yminmax[1]), lower=quantile(data, lowupp[1]),
+    middle=median(data), upper=quantile(data, lowupp[2]),
+    ymax=quantile(data, yminmax[2])), by=.(mp, indicator, name)]
 
   # PLOT
   p <- ggplot(dat,
@@ -75,20 +80,24 @@ plotTOs <- function(data, x=unique(data$indicator)[1], y=unique(data$indicator)[
   data <- data[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
     keyby=list(indicator, name, year, mp)]
 
+  # LABELS probs
+  xsyms <- syms(paste0("x", probs))
+  ysyms <- syms(paste0("y", probs))
+
   # SUBSET indicators
   daty <- data[indicator %in% y,]
-  setnames(daty, seq(5, 4 + length(probs)), paste0("y", paste0(probs*100, "%")))
+  setnames(daty, seq(5, 4 + length(probs)), paste0("y", probs))
   datx <- data[indicator %in% x,]
-  setnames(datx, seq(5, 4 + length(probs)), paste0("x", paste0(probs*100, "%")))
+  setnames(datx, seq(5, 4 + length(probs)), paste0("x", probs))
   
   # MERGE x into y
   data <- cbind(daty, datx[,-(1:4)])
-
-  p <- ggplot(data, aes(x=`x50%`, y=`y50%`)) +
+  
+  p <- ggplot(data, aes(x=!!xsyms[[2]], y=!!ysyms[[2]])) +
     xlab(unique(datx$name)) + ylab("") +
   # PLOT lines
-  geom_linerange(aes(ymin=`y10%`, ymax=`y90%`), size=size, alpha=alpha) +
-  geom_linerangeh(aes(xmin=`x10%`, xmax=`x90%`), size=size, alpha=alpha) +
+  geom_linerange(aes(ymin=!!ysyms[[1]], ymax=!!ysyms[[3]]), size=size, alpha=alpha) +
+  geom_linerangeh(aes(xmin=!!xsyms[[1]], xmax=!!xsyms[[3]]), size=size, alpha=alpha) +
   # PLOT median dots
   geom_point(aes(fill=mp), shape=21, size=4) +
   facet_wrap(~name, scales="free_y") +
