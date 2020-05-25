@@ -3,7 +3,7 @@ Title: Plots and Visualization Tools for Management Strategy Evaluation Results
 Version: 0.2.3
 Date: 2019-12-15
 Authors@R: c(person(given = "Iago", family = "Mosqueira", role = c("aut", "cre"),
-  email = "iago.mosqueira@ec.europa.eu"))
+  email = "iago.mosqueira@wur.nl"))
 Description: A set of plots and visualization tools to explore and present the
   results of Management Strategy Evaluation (MSE) analyses.
 Depends:
