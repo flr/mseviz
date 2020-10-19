@@ -1,4 +1,4 @@
-import("ggplot2")
+import("ggplotFL")
 import("data.table")
 import("xtable")
 import("patchwork")

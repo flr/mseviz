@@ -195,7 +195,7 @@ plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
     stop("om and runs must be of class FLQuant and FLQuants respectively.")
  
   # PLOT om
-  p1 <- plot(om, probs=probs) + xlim(NA, iyear + 1) +
+  p1 <- ggplotFL::plot(om, probs=probs) + xlim(NA, iyear + 1) +
     geom_vline(xintercept=iyear)
 
   # RPs
@@ -204,7 +204,7 @@ plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
   if(!missing(target))
     p1 <- p1 + geom_hline(aes(yintercept=target), colour="green", linetype=2)
 
-  p2 <- plot(runs, probs=probs, iter=iter) + facet_wrap(~qname,
+  p2 <- ggplotFL::plot(runs, probs=probs, iter=iter) + facet_wrap(~qname,
     ncol=2) + ylab(ylab) + geom_vline(xintercept=iyear)
 
   # RPs
@@ -214,8 +214,8 @@ plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
     p2 <- p2 + geom_hline(aes(yintercept=target), colour="green", linetype=2)
 
   if(!missing(ylim))
-    p2 <- p2 + ylim(ylim)
-
+    p2 <- p2 + coord_cartesian(ylim=ylim)
+  
   p <- p1 + p2 + plot_layout(ncol=1, heights=c(1, length(runs) / 2))
 
   return(p)

@@ -7,7 +7,7 @@ Authors@R: c(person(given = "Iago", family = "Mosqueira", role = c("aut", "cre")
 Description: A set of plots and visualization tools to explore and present the
   results of Management Strategy Evaluation (MSE) analyses.
 Depends:
-  ggplot2,
+  ggplotFL,
   data.table
 Imports:
   ggstance,
