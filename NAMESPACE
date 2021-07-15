@@ -4,6 +4,4 @@ import("xtable")
 import("patchwork")
 importFrom("stats", "quantile")
 importFrom("utils", "data")
-importFrom("ggstance",
-  "geom_linerangeh")
 exportPattern("^[^\\.]")

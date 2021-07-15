@@ -73,8 +73,9 @@ plotBPs <- function(data, indicators=unique(data$indicator),
 #' data(perf)
 #' plotTOs(perf)
 
-plotTOs <- function(data, x=unique(data$indicator)[1], y=unique(data$indicator)[-1],
-  probs=c(0.10, 0.50, 0.90), size=0.50, alpha=0.75) {
+plotTOs <- function(data, x=unique(data$indicator)[1],
+  y=setdiff(unique(data$indicator), x), probs=c(0.10, 0.50, 0.90),
+  size=0.50, alpha=0.75) {
 
   # CALCULATE quantiles
   data <- data[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
@@ -97,7 +98,7 @@ plotTOs <- function(data, x=unique(data$indicator)[1], y=unique(data$indicator)[
     xlab(unique(datx$name)) + ylab("") +
   # PLOT lines
   geom_linerange(aes(ymin=!!ysyms[[1]], ymax=!!ysyms[[3]]), size=size, alpha=alpha) +
-  geom_linerangeh(aes(xmin=!!xsyms[[1]], xmax=!!xsyms[[3]]), size=size, alpha=alpha) +
+  geom_linerange(aes(xmin=!!xsyms[[1]], xmax=!!xsyms[[3]]), size=size, alpha=alpha) +
   # PLOT median dots
   geom_point(aes(fill=mp), shape=21, size=4) +
   facet_wrap(~name, scales="free_y") +
@@ -153,7 +154,7 @@ kobeMPs <- function(data, x="S3", y="S5", xlim=0.40, ylim=1.4,
     geom_segment(aes(x=xlim, xend=xlim, y=0, yend=ylim), colour='gray') +
     # PLOT lines
     geom_linerange(aes(ymin=`y10%`, ymax=`y90%`), size=size, alpha=alpha) +
-    geom_linerangeh(aes(xmin=`x10%`, xmax=`x90%`), size=size, alpha=alpha) +
+    geom_linerange(aes(xmin=`x10%`, xmax=`x90%`), size=size, alpha=alpha) +
     # PLOT median dots
     geom_point(aes(fill=mp), shape=21, size=4) +
     scale_shape(solid=FALSE) + theme(legend.title=element_blank()) +

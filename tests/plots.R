@@ -17,4 +17,8 @@ data(perf)
 plotBPs(perf)
 plotBPs(perf, target=c(S3=1))
 
-# 2. 
+# 2. Trade-offs
+
+plotTOs(perf, "Y1", c("S3", "S5", "T1", "S6"))
+
+

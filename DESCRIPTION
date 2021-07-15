@@ -10,16 +10,16 @@ Depends:
   ggplotFL,
   data.table
 Imports:
-  ggstance,
   xtable,
   patchwork
 Suggests:
   testthat,
   knitr,
-  rmarkdown
+  rmarkdown,
+  markdown
 VignetteBuilder: knitr
 License: file LICENSE
 LazyLoad: Yes
 LazyData: No
 BugReports: https://github.com/iagomosqueira/mseviz/issues
-RoxygenNote: 6.0.0
+RoxygenNote: 7.1.1
