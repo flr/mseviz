@@ -26,9 +26,10 @@ plotBPs <- function(data, indicators=unique(data$indicator),
   data[, name:=factor(name, levels=cols$name[match(cols$indicator, indicators)],
     ordered=TRUE)]
 
-  dat <- data[, .(ymin=quantile(data, yminmax[1]), lower=quantile(data, lowupp[1]),
-    middle=median(data), upper=quantile(data, lowupp[2]),
-    ymax=quantile(data, yminmax[2])), by=.(mp, indicator, name)]
+  dat <- data[, .(ymin=quantile(data, yminmax[1], na.rm=TRUE),
+    lower=quantile(data, lowupp[1], na.rm=TRUE),
+    middle=median(data, na.rm=TRUE), upper=quantile(data, lowupp[2], na.rm=TRUE),
+    ymax=quantile(data, yminmax[2], na.rm=TRUE)), by=.(mp, indicator, name)]
 
   # PLOT
   p <- ggplot(dat,
