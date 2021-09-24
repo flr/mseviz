@@ -8,28 +8,37 @@
 
 # plotBPs {{{
 
-#' Boxplot by MP for a range of indicators
+#' Boxplot by MP for a range of statistics
 #' Figure 3
+#' @examples
+#' data(perf)
+#' # A data.table of performance statistics per run,
+#' head(perf)
+#' # plot selected statistics
+#' plotBPs(perf, statistics=c("SB0", "FMSY", "green"))
+#' # Add targets and limoits by statistics, as named vectors
+#' plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
+#'   target=c(SB0=0.40, FMSY=1, green=0.5), limit=c(SB0=0.10))
 
-plotBPs <- function(data, indicators=unique(data$indicator),
+plotBPs <- function(data, statistics=unique(data$statistic),
   target=missing, limit=missing, yminmax=c(0.10, 0.90), lowupp=c(0.25, 0.75)) {
 
   # CHECK quantiles
   if(any(c(length(yminmax), length(lowupp)) != 2))
     stop("'yminmax' and 'lowupp' must be both of length 2")
 
-  # SUBSET indicators
-  data <- data[indicator %in% indicators,]
+  # SUBSET statistics
+  data <- data[statistic %in% statistics,]
   
-  # ORDER name as of indicators
-  cols <- unique(data[,c('indicator','name')])
-  data[, name:=factor(name, levels=cols$name[match(cols$indicator, indicators)],
+  # ORDER name as of statistics
+  cols <- unique(data[,c('statistic','name')])
+  data[, name:=factor(name, levels=cols$name[match(cols$statistic, statistics)],
     ordered=TRUE)]
 
   dat <- data[, .(ymin=quantile(data, yminmax[1], na.rm=TRUE),
     lower=quantile(data, lowupp[1], na.rm=TRUE),
     middle=median(data, na.rm=TRUE), upper=quantile(data, lowupp[2], na.rm=TRUE),
-    ymax=quantile(data, yminmax[2], na.rm=TRUE)), by=.(mp, indicator, name)]
+    ymax=quantile(data, yminmax[2], na.rm=TRUE)), by=.(mp, statistic, name)]
 
   # PLOT
   p <- ggplot(dat,
@@ -38,7 +47,7 @@ plotBPs <- function(data, indicators=unique(data$indicator),
     # data ~ mp, colour by mp
     # PLOT boxplot by mp
     geom_boxplot(stat="identity") +
-    # PANELS per indicators
+    # PANELS per statistics
     facet_wrap(~name, scales='free_y') +
     xlab("") + ylab("") +
     # DELETE x-axis labels, LEGEND in 6th panel
@@ -49,16 +58,16 @@ plotBPs <- function(data, indicators=unique(data$indicator),
 
   # TARGET
   if(!missing(target)) {
-    dat <- data[indicator %in% names(target),]
-    dat[, target:=unlist(target)[match(indicator, names(target))]]
+    dat <- data[statistic %in% names(target),]
+    dat[, target:=unlist(target)[match(statistic, names(target))]]
     p <- p + geom_hline(data=dat, aes(yintercept=target), colour="green",
       linetype="longdash", size=1)
   }
   
   # LIMIT
   if(!missing(limit)) {
-    dat <- data[indicator %in% names(limit),]
-    dat[, limit:=unlist(limit)[match(indicator, names(limit))]]
+    dat <- data[statistic %in% names(limit),]
+    dat[, limit:=unlist(limit)[match(statistic, names(limit))]]
     p <- p + geom_hline(data=dat, aes(yintercept=limit), colour="red",
       linetype="longdash", size=1)
   }
@@ -68,28 +77,28 @@ plotBPs <- function(data, indicators=unique(data$indicator),
 
 # plotTOs {{{
 
-#' Trade-offs plot by MP for a range of indicators
+#' Trade-offs plot by MP for a range of statistics
 #' Figure 4
 #' @examples
 #' data(perf)
-#' plotTOs(perf)
+#' plotTOs(perf, x="C", y=c("SBMSY", "FMSY", "green", "SB0"))
 
-plotTOs <- function(data, x=unique(data$indicator)[1],
-  y=setdiff(unique(data$indicator), x), probs=c(0.10, 0.50, 0.90),
+plotTOs <- function(data, x=unique(data$statistic)[1],
+  y=setdiff(unique(data$statistic), x), probs=c(0.10, 0.50, 0.90),
   size=0.50, alpha=0.75) {
 
   # CALCULATE quantiles
   data <- data[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
-    keyby=list(indicator, name, year, mp)]
+    keyby=list(statistic, name, year, mp)]
 
   # LABELS probs
   xsyms <- syms(paste0("x", probs))
   ysyms <- syms(paste0("y", probs))
 
-  # SUBSET indicators
-  daty <- data[indicator %in% y,]
+  # SUBSET statistics
+  daty <- data[statistic %in% y,]
   setnames(daty, seq(5, 4 + length(probs)), paste0("y", probs))
-  datx <- data[indicator %in% x,]
+  datx <- data[statistic %in% x,]
   setnames(datx, seq(5, 4 + length(probs)), paste0("x", probs))
   
   # MERGE x into y
@@ -119,12 +128,12 @@ kobeMPs <- function(data, x="S3", y="S5", xlim=0.40, ylim=1.4,
   
   # CALCULATE quantiles
   data <- data[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
-    keyby=list(indicator, name, year, mp)]
+    keyby=list(statistic, name, year, mp)]
 
-  # SUBSET indicators
-  daty <- data[indicator %in% y,]
+  # SUBSET statistics
+  daty <- data[statistic %in% y,]
   setnames(daty, seq(5, 4 + length(probs)), paste0("y", paste0(probs*100, "%")))
-  datx <- data[indicator %in% x,]
+  datx <- data[statistic %in% x,]
   setnames(datx, seq(5, 4 + length(probs)), paste0("x", paste0(probs*100, "%")))
   
   # MERGE x into y
@@ -177,7 +186,7 @@ kobeMPs <- function(data, x="S3", y="S5", xlim=0.40, ylim=1.4,
 
 kobeTS <- function(perfts) {
 
-  ggplot(perfts, aes(x=ISOdate(year, 1, 1), y=data, fill=indicator)) + 
+  ggplot(perfts, aes(x=ISOdate(year, 1, 1), y=data, fill=statistic)) + 
     geom_col(colour="black", size=0.5) +
     scale_discrete_manual(name = "Kobe Quadrant", aesthetics=c("fill"),
       values=c(green="darkgreen", red="red", yellow="yellow2", orange="orange")) +
