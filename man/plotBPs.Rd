@@ -2,12 +2,12 @@
 % Please edit documentation in R/plots.R
 \name{plotBPs}
 \alias{plotBPs}
-\title{Boxplot by MP for a range of indicators
+\title{Boxplot by MP for a range of statistics
 Figure 3}
 \usage{
 plotBPs(
   data,
-  indicators = unique(data$indicator),
+  statistics = unique(data$statistic),
   target = missing,
   limit = missing,
   yminmax = c(0.1, 0.9),
@@ -15,6 +15,16 @@ plotBPs(
 )
 }
 \description{
-Boxplot by MP for a range of indicators
+Boxplot by MP for a range of statistics
 Figure 3
+}
+\examples{
+data(perf)
+# A data.table of performance statistics per run,
+head(perf)
+# plot selected statistics
+plotBPs(perf, statistics=c("SB0", "FMSY", "green"))
+# Add targets and limoits by statistics, as named vectors
+plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
+  target=c(SB0=0.40, FMSY=1, green=0.5), limit=c(SB0=0.10))
 }

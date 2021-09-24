@@ -2,23 +2,23 @@
 % Please edit documentation in R/plots.R
 \name{plotTOs}
 \alias{plotTOs}
-\title{Trade-offs plot by MP for a range of indicators
+\title{Trade-offs plot by MP for a range of statistics
 Figure 4}
 \usage{
 plotTOs(
   data,
-  x = unique(data$indicator)[1],
-  y = setdiff(unique(data$indicator), x),
+  x = unique(data$statistic)[1],
+  y = setdiff(unique(data$statistic), x),
   probs = c(0.1, 0.5, 0.9),
   size = 0.5,
   alpha = 0.75
 )
 }
 \description{
-Trade-offs plot by MP for a range of indicators
+Trade-offs plot by MP for a range of statistics
 Figure 4
 }
 \examples{
 data(perf)
-plotTOs(perf)
+plotTOs(perf, x="C", y=c("SBMSY", "FMSY", "green", "SB0"))
 }
