@@ -16,7 +16,7 @@
 #' head(perf)
 #' # plot selected statistics
 #' plotBPs(perf, statistics=c("SB0", "FMSY", "green"))
-#' # Add targets and limoits by statistics, as named vectors
+#' # Add targets and limits by statistics, as named vectors
 #' plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
 #'   target=c(SB0=0.40, FMSY=1, green=0.5), limit=c(SB0=0.10))
 
@@ -34,16 +34,20 @@ plotBPs <- function(data, statistics=unique(data$statistic),
   cols <- unique(data[,c('statistic','name')])
   data[, name:=factor(name, levels=cols$name[match(cols$statistic, statistics)],
     ordered=TRUE)]
+  
+  # ORDER mp as in input
+  dat[, mp:=factor(mp, levels=unique(mp))]
 
   dat <- data[, .(ymin=quantile(data, yminmax[1], na.rm=TRUE),
     lower=quantile(data, lowupp[1], na.rm=TRUE),
     middle=median(data, na.rm=TRUE), upper=quantile(data, lowupp[2], na.rm=TRUE),
     ymax=quantile(data, yminmax[2], na.rm=TRUE)), by=.(mp, statistic, name)]
 
+
   # PLOT
   p <- ggplot(dat,
-    aes(x=mp, ymin=ymin, lower=lower, middle=middle, upper=upper, ymax=ymax,
-      fill=mp)) +
+    aes(x=mp, ymin=ymin, lower=lower, middle=middle,
+      upper=upper, ymax=ymax, fill=mp)) +
     # data ~ mp, colour by mp
     # PLOT boxplot by mp
     geom_boxplot(stat="identity") +
@@ -85,7 +89,10 @@ plotBPs <- function(data, statistics=unique(data$statistic),
 
 plotTOs <- function(data, x=unique(data$statistic)[1],
   y=setdiff(unique(data$statistic), x), probs=c(0.10, 0.50, 0.90),
-  size=0.50, alpha=0.75) {
+   size=0.50, alpha=0.75) {
+  
+  # ORDER mp as in input
+  data[, mp:=factor(mp, levels=unique(mp))]
 
   # CALCULATE quantiles
   data <- data[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
@@ -102,9 +109,9 @@ plotTOs <- function(data, x=unique(data$statistic)[1],
   setnames(datx, seq(5, 4 + length(probs)), paste0("x", probs))
   
   # MERGE x into y
-  data <- cbind(daty, datx[,-(1:4)])
-  
-  p <- ggplot(data, aes(x=!!xsyms[[2]], y=!!ysyms[[2]])) +
+  dat <- cbind(daty, datx[,-(1:4)])
+ 
+  p <- ggplot(dat, aes(x=!!xsyms[[2]], y=!!ysyms[[2]])) +
     xlab(unique(datx$name)) + ylab("") +
   # PLOT lines
   geom_linerange(aes(ymin=!!ysyms[[1]], ymax=!!ysyms[[3]]), size=size, alpha=alpha) +
