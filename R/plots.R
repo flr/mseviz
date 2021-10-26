@@ -36,13 +36,12 @@ plotBPs <- function(data, statistics=unique(data$statistic),
     ordered=TRUE)]
   
   # ORDER mp as in input
-  dat[, mp:=factor(mp, levels=unique(mp))]
+  data[, mp:=factor(mp, levels=unique(mp))]
 
   dat <- data[, .(ymin=quantile(data, yminmax[1], na.rm=TRUE),
     lower=quantile(data, lowupp[1], na.rm=TRUE),
     middle=median(data, na.rm=TRUE), upper=quantile(data, lowupp[2], na.rm=TRUE),
     ymax=quantile(data, yminmax[2], na.rm=TRUE)), by=.(mp, statistic, name)]
-
 
   # PLOT
   p <- ggplot(dat,

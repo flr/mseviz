@@ -74,7 +74,7 @@ om
 ## plotBPs, indicators boxplots
 
 ```{r plotbps}
-plotBPs(perf, indicators=c("T1", "S6", "F2", "Y1", "S3"))
+plotBPs(perf, statistics=c("T1", "S6", "F2", "Y1", "S3"))
 ```
 
 ## plotTOs, trade-off plots
