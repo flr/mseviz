@@ -19,8 +19,10 @@
 #' # Add targets and limits by statistics, as named vectors
 #' plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
 #'   target=c(SB0=0.40, FMSY=1, green=0.5), limit=c(SB0=0.10))
+#' # size control the diameter of the point behind thin boxplots
+#' plotBPs(perf, statistics=c("SB0", "FMSY", "green"), size=3)
 
-plotBPs <- function(data, statistics=unique(data$statistic),
+plotBPs <- function(data, statistics=unique(data$statistic), size=3,
   target=missing, limit=missing, yminmax=c(0.10, 0.90), lowupp=c(0.25, 0.75)) {
 
   # CHECK quantiles
@@ -48,6 +50,11 @@ plotBPs <- function(data, statistics=unique(data$statistic),
     aes(x=mp, ymin=ymin, lower=lower, middle=middle,
       upper=upper, ymax=ymax, fill=mp)) +
     # data ~ mp, colour by mp
+    # PLOT point by mp, useful if boxplot is very thin
+    geom_point(data=dat[, .(middle=mean(middle)), by=.(mp, name)],
+      aes(x=mp, y=middle), colour="black", size=size + size*0.20, inherit.aes=FALSE) +
+    geom_point(data=dat[, .(middle=mean(middle)), by=.(mp, name)],
+      aes(x=mp, y=middle, colour=mp), size=size, inherit.aes=FALSE) +
     # PLOT boxplot by mp
     geom_boxplot(stat="identity") +
     # PANELS per statistics
