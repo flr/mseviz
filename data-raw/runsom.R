@@ -35,11 +35,12 @@ library(data.table)
 
 # METRICS
 runs <- lapply(omps, metrics, metrics=list(F=fbar, SB=ssb, C=catch))
-runs <- rbindlist(lapply(runs, as.data.frame, drop=TRUE), idcol="mp")
+# runs <- rbindlist(lapply(runs, as.data.frame, drop=TRUE), idcol="mp")
 
 # OM
-om <- data.table(as.data.frame(metrics(ple4,
-  metrics=list(F=fbar, SB=ssb, C=catch)), drop=TRUE))
+om <- metrics(ple4, metrics=list(F=fbar, SB=ssb, C=catch))
+#om <- data.table(as.data.frame(metrics(ple4,
+#  metrics=list(F=fbar, SB=ssb, C=catch)), drop=TRUE))
 # om[, iter:=1]
 #om <- om[,c(1,4,2,3)]
 

@@ -136,7 +136,7 @@ plotTOs <- function(data, x=unique(data$statistic)[1],
 #' @examples
 #' kobeMPs(perf)
 
-kobeMPs <- function(data, x="S3", y="S5", xlim=0.40, ylim=1.4,
+kobeMPs <- function(data, x="SBMSY", y="FMSY", xlim=0.40, ylim=1.4,
   probs=c(0.10, 0.50, 0.90), size=0.75, alpha=1) {
   
   # CALCULATE quantiles

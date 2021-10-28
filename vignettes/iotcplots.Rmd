@@ -74,13 +74,13 @@ om
 ## plotBPs, indicators boxplots
 
 ```{r plotbps}
-plotBPs(perf, statistics=c("T1", "S6", "F2", "Y1", "S3"))
+plotBPs(perf, statistics=c("FMSY", "SBMSY", "green", "risk1"))
 ```
 
 ## plotTOs, trade-off plots
 
 ```{r plottos}
-plotTOs(perf, x="Y1", y=c("S3", "S6", "F2", "T1"))
+plotTOs(perf, x="C", y=c("FMSY", "SBMSY", "green", "risk1"))
 ```
 
 ## kobeMPs, performance on Kobe plot
@@ -95,12 +95,11 @@ kobeMPs(perf)
 
 ```{r plotomrunsf}
 data(omruns)
-#plotOMruns(om[qname=="F",], runs[qname=="F",], limit=0.8, target=0.4)
+plotOMruns(om$F, FLQuants(lapply(runs, '[[', 'F')), limit=0.8, target=0.4)
 ```
 
 ```{r plotomrunsc}
-plot(9)
-#plotOMruns(om[qname=="C",], runs[qname=="C",])
+plotOMruns(om$C, FLQuants(lapply(runs, '[[', 'C')), limit=0.8, target=0.4)
 ```
 
 # IOTC MSE output tables
