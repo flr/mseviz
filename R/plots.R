@@ -136,8 +136,8 @@ plotTOs <- function(data, x=unique(data$statistic)[1],
 #' @examples
 #' kobeMPs(perf)
 
-kobeMPs <- function(data, x="SBMSY", y="FMSY", xlim=0.40, ylim=1.4,
-  probs=c(0.10, 0.50, 0.90), size=0.75, alpha=1) {
+kobeMPs <- function(data, x="SBMSY", y="FMSY", SBlim=0.40, Flim=1.4, Ftarget=1,
+  SBtarget=1, probs=c(0.10, 0.50, 0.90), size=0.75, alpha=1) {
   
   # CALCULATE quantiles
   data <- data[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
@@ -148,14 +148,17 @@ kobeMPs <- function(data, x="SBMSY", y="FMSY", xlim=0.40, ylim=1.4,
   setnames(daty, seq(5, 4 + length(probs)), paste0("y", paste0(probs*100, "%")))
   datx <- data[statistic %in% x,]
   setnames(datx, seq(5, 4 + length(probs)), paste0("x", paste0(probs*100, "%")))
-  
+
+  # READJUST limits
+  ylim <- ceiling(max(daty[,"y90%"]) * 2) / 2
+  xlim <- ceiling(max(datx[,"x90%"]) * 2) / 2
+
   # MERGE x into y
   data <- cbind(daty, datx[,-(1:4)])
-  lim <- pmax(round(apply(data[,c('y90%','x90%')] / 0.5, 2, max)) * 0.5, 1.5)
 
   # PLOT
   p <- ggplot(data, aes(x=`x50%`, y=`y50%`)) +
-    # Kobe background
+    # DRAW Kobe background
     geom_rect(aes(xmin=1, xmax=Inf, ymin=0, ymax=1), colour='green',
       fill='green') +
     geom_rect(aes(xmin=0, xmax=1, ymin=0, ymax=1), colour='yellow',
@@ -164,17 +167,17 @@ kobeMPs <- function(data, x="SBMSY", y="FMSY", xlim=0.40, ylim=1.4,
       fill='orange') +
     geom_rect(aes(xmin=0, xmax=1, ymin=1, ymax=Inf), colour='red',
       fill='red') +
-    # Central GRID
+    # DRAW central GRID
     geom_hline(aes(yintercept=1)) + geom_vline(aes(xintercept=1)) +
-    # lims
-    scale_x_continuous(expand = c(0, 0), limits = c(0, lim['x90%'])) +
-    scale_y_continuous(expand = c(0, 0), limits = c(0, lim['y90%'])) +
+    # SET lims
+    scale_x_continuous(expand = c(0, 0), limits = c(0, xlim)) +
+    scale_y_continuous(expand = c(0, 0), limits = c(0, ylim)) +
     # DROP background grid
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
       panel.background = element_blank(), axis.line = element_blank()) +
     # PLOT LRPs
-    geom_segment(aes(x=xlim, xend=Inf, y=ylim, yend=ylim), colour='gray') +
-    geom_segment(aes(x=xlim, xend=xlim, y=0, yend=ylim), colour='gray') +
+    geom_segment(aes(x=SBlim, xend=Inf, y=Flim, yend=Flim), colour='gray') +
+    geom_segment(aes(x=SBlim, xend=SBlim, y=0, yend=Flim), colour='gray') +
     # PLOT lines
     geom_linerange(aes(ymin=`y10%`, ymax=`y90%`), size=size, alpha=alpha) +
     geom_linerange(aes(xmin=`x10%`, xmax=`x90%`), size=size, alpha=alpha) +
@@ -183,13 +186,13 @@ kobeMPs <- function(data, x="SBMSY", y="FMSY", xlim=0.40, ylim=1.4,
     scale_shape(solid=FALSE) + theme(legend.title=element_blank()) +
     # LABELS
     labs(x=expression(SB/SB[MSY]), y=expression(F/F[MSY])) +
-    annotate("text", x = xlim - xlim * 0.35, y = 0.1,
+    annotate("text", x = SBlim - SBlim * 0.35, y = 0.1,
       label = "SB[lim]", parse=TRUE) +
     annotate("text", x = 0.90, y = 0.1, label = "SB[targ]", parse=TRUE) +
-    annotate("text", x = lim["x90%"] - lim["x90%"] * 0.10,
-      y = ylim + ylim * 0.10,
+    annotate("text", x = xlim * 0.90,
+      y = Flim * 1.10,
       label = "F[lim]", parse=TRUE) +
-    annotate("text", x =  lim["x90%"] - lim["x90%"] * 0.10, y = 1.10,
+    annotate("text", x =  xlim - xlim * 0.10, y = Ftarget * 1.10,
       label = "F[targ]", parse=TRUE)
 
   return(p)
