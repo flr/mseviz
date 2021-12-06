@@ -135,9 +135,10 @@ plotTOs <- function(data, x=unique(data$statistic)[1],
 
 #' @examples
 #' kobeMPs(perf)
+#' kobeMPs(perf, SBlim=0.30, Flim=1.3, Ftarget=0.85, SBtarget=1.15)
 
-kobeMPs <- function(data, x="SBMSY", y="FMSY", SBlim=0.40, Flim=1.4, Ftarget=1,
-  SBtarget=1, probs=c(0.10, 0.50, 0.90), size=0.75, alpha=1) {
+kobeMPs <- function(data, x="SBMSY", y="FMSY", SBlim=0.40, Flim=1.4, Ftarget=NULL,
+  SBtarget=NULL, probs=c(0.10, 0.50, 0.90), size=0.75, alpha=1) {
   
   # CALCULATE quantiles
   data <- data[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
@@ -175,9 +176,6 @@ kobeMPs <- function(data, x="SBMSY", y="FMSY", SBlim=0.40, Flim=1.4, Ftarget=1,
     # DROP background grid
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
       panel.background = element_blank(), axis.line = element_blank()) +
-    # PLOT LRPs
-    geom_segment(aes(x=SBlim, xend=Inf, y=Flim, yend=Flim), colour='gray') +
-    geom_segment(aes(x=SBlim, xend=SBlim, y=0, yend=Flim), colour='gray') +
     # PLOT lines
     geom_linerange(aes(ymin=`y10%`, ymax=`y90%`), size=size, alpha=alpha) +
     geom_linerange(aes(xmin=`x10%`, xmax=`x90%`), size=size, alpha=alpha) +
@@ -185,15 +183,31 @@ kobeMPs <- function(data, x="SBMSY", y="FMSY", SBlim=0.40, Flim=1.4, Ftarget=1,
     geom_point(aes(fill=mp), shape=21, size=4) +
     scale_shape(solid=FALSE) + theme(legend.title=element_blank()) +
     # LABELS
-    labs(x=expression(SB/SB[MSY]), y=expression(F/F[MSY])) +
-    annotate("text", x = SBlim - SBlim * 0.35, y = 0.1,
-      label = "SB[lim]", parse=TRUE) +
-    annotate("text", x = 0.90, y = 0.1, label = "SB[targ]", parse=TRUE) +
-    annotate("text", x = xlim * 0.90,
-      y = Flim * 1.10,
-      label = "F[lim]", parse=TRUE) +
-    annotate("text", x =  xlim - xlim * 0.10, y = Ftarget * 1.10,
-      label = "F[targ]", parse=TRUE)
+    labs(x=expression(SB/SB[MSY]), y=expression(F/F[MSY]))
+
+    # Limit
+    if(!is.null(SBlim) & !is.null(Flim)) {
+      p <- p +
+        geom_segment(aes(x=SBlim, xend=Inf, y=Flim, yend=Flim), colour='gray') +
+        geom_segment(aes(x=SBlim, xend=SBlim, y=0, yend=Flim), colour='gray') +
+        annotate("text", x = SBlim, y = 0.1, hjust=-0.1, 
+          label = "SB[lim]", parse=TRUE) +
+        annotate("text", x = xlim * 0.90, y = Flim, vjust=-0.10,
+          label = "F[lim]", parse=TRUE)
+    }
+    
+    # Target
+    if(!is.null(SBtarget) & !is.null(Ftarget)) {
+      p <- p +
+        geom_segment(aes(x=SBtarget, xend=Inf, y=Ftarget, yend=Ftarget),
+          size=0.25, linetype=2) +
+          geom_segment(aes(x=SBtarget, xend=SBtarget, y=0, yend=Ftarget),
+          size=0.25, linetype=2) +
+        annotate("text", x = SBtarget, y = 0.1, hjust=-0.1,
+          label = "SB[targ]", parse=TRUE) +
+        annotate("text", x =  xlim * 0.90, y = Ftarget, vjust=-0.10,
+          label = "F[targ]", parse=TRUE)
+    }
 
   return(p)
 } # }}}
