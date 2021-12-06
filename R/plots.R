@@ -135,7 +135,7 @@ plotTOs <- function(data, x=unique(data$statistic)[1],
 
 #' @examples
 #' kobeMPs(perf)
-#' kobeMPs(perf, SBlim=0.30, Flim=1.3, Ftarget=0.85, SBtarget=1.15)
+#' kobeMPs(perf, Ftarget=0.80, SBtarget=0.80)
 
 kobeMPs <- function(data, x="SBMSY", y="FMSY", SBlim=0.40, Flim=1.4, Ftarget=NULL,
   SBtarget=NULL, probs=c(0.10, 0.50, 0.90), size=0.75, alpha=1) {
@@ -190,7 +190,7 @@ kobeMPs <- function(data, x="SBMSY", y="FMSY", SBlim=0.40, Flim=1.4, Ftarget=NUL
       p <- p +
         geom_segment(aes(x=SBlim, xend=Inf, y=Flim, yend=Flim), colour='gray') +
         geom_segment(aes(x=SBlim, xend=SBlim, y=0, yend=Flim), colour='gray') +
-        annotate("text", x = SBlim, y = 0.1, hjust=-0.1, 
+        annotate("text", x = SBlim, y = 0.10, hjust=-0.10, 
           label = "SB[lim]", parse=TRUE) +
         annotate("text", x = xlim * 0.90, y = Flim, vjust=-0.10,
           label = "F[lim]", parse=TRUE)
@@ -203,7 +203,7 @@ kobeMPs <- function(data, x="SBMSY", y="FMSY", SBlim=0.40, Flim=1.4, Ftarget=NUL
           size=0.25, linetype=2) +
           geom_segment(aes(x=SBtarget, xend=SBtarget, y=0, yend=Ftarget),
           size=0.25, linetype=2) +
-        annotate("text", x = SBtarget, y = 0.1, hjust=-0.1,
+        annotate("text", x = SBtarget, y = 0.10, hjust=-0.10,
           label = "SB[targ]", parse=TRUE) +
         annotate("text", x =  xlim * 0.90, y = Ftarget, vjust=-0.10,
           label = "F[targ]", parse=TRUE)
