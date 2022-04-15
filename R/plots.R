@@ -42,7 +42,8 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
 
   dat <- data[, .(ymin=quantile(data, yminmax[1], na.rm=TRUE),
     lower=quantile(data, lowupp[1], na.rm=TRUE),
-    middle=median(data, na.rm=TRUE), upper=quantile(data, lowupp[2], na.rm=TRUE),
+    # middle=median(data, na.rm=TRUE), upper=quantile(data, lowupp[2], na.rm=TRUE),
+    middle=mean(data, na.rm=TRUE), upper=quantile(data, lowupp[2], na.rm=TRUE),
     ymax=quantile(data, yminmax[2], na.rm=TRUE)), by=.(mp, statistic, name)]
 
   # PLOT
@@ -134,6 +135,7 @@ plotTOs <- function(data, x=unique(data$statistic)[1],
 # kobeMPs {{{
 
 #' @examples
+#' data(perf)
 #' kobeMPs(perf)
 #' kobeMPs(perf, Ftarget=0.80, SBtarget=0.80)
 
@@ -229,7 +231,7 @@ kobeTS <- function(perfts) {
 # plotOMruns {{{
 
 plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
-  probs=c(0.10, 0.25, 0.50, 0.75, 0.90), iyear=dims(om)$maxyear, ylab="", ylim=missing) {
+  probs=c(0.10, 0.25, 0.50, 0.75, 0.90), iyear=dims(om)$maxyear, ylab="", ylim="missing") {
 
   # CHECK classses
   if(!is(om, "FLQuant") | !is(runs, "FLQuants"))

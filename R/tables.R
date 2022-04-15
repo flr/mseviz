@@ -28,18 +28,18 @@ foo <- function(expr) {
 
 # summTable {{{
 
-summTable <- function(data,  indicators=unique(data[['indicator']]),
+summTable <- function(data,  statistics=unique(data[['statistic']]),
   probs=c(0.10, 0.50, 0.90), ...) {
 
-  # SUBSET indicators
-  data <- data[indicator %in% indicators,]
+  # SUBSET statistics
+  data <- data[statistic %in% statistics,]
 
   # CONVERT name to LaTeX
   data[, name:=foo(name)]
 
   # CALCULATE quantiles
   qdata <- data[,as.list(quantile(data, probs=probs, na.rm=TRUE)),
-    keyby=list(indicator, name, mp)]
+    keyby=list(statistic, name, mp)]
   
   qdata[, fig:=paste0(
     format(round(`50%`, 2), digits=1, scientific=FALSE, trim=TRUE), " (",
@@ -50,7 +50,7 @@ summTable <- function(data,  indicators=unique(data[['indicator']]),
   
   # CALCULATE means
   mdata <- data[, .(fig=format(mean(data), digits=2, scientific=FALSE, trim=TRUE)),
-    keyby=list(indicator, name, mp)]
+    keyby=list(statistic, name, mp)]
   
   mtab <- dcast(mdata, mp ~ name, value.var = "fig")
   
@@ -75,14 +75,16 @@ summTable <- function(data,  indicators=unique(data[['indicator']]),
 # data <- perft[year == 2023]
 # desc <- Reduce(rbind,lapply(indicators, function(x) as.data.frame(x[2:3])))
 
-resTable <- function(data, indicators=unique(data[['indicator']]), ...) {
+# TODO: FIX statistics
 
-  desc <- Reduce(rbind, lapply(indicators, function(x) as.data.frame(x[2:3])))
+resTable <- function(data, statistics=unique(data[['statistic']]), ...) {
 
-  # COMPUTE mean by indicator & mp
-  mdat <- data[, .(data=mean(data)), by=.(indicator, mp, name)]
+  desc <- Reduce(rbind, lapply(statistics, function(x) as.data.frame(x[2:3])))
 
-  # MERGE indicators description
+  # COMPUTE mean by statistic & mp
+  mdat <- data[, .(data=mean(data)), by=.(statistic, mp, name)]
+
+  # MERGE statistics description
   tdat <- merge(mdat, desc, by.x='name', by.y='name')
   
   tab <- dcast(tdat, desc + name ~ mp, value.var = "data")
