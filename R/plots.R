@@ -247,8 +247,10 @@ plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
   if(!missing(target))
     p1 <- p1 + geom_hline(aes(yintercept=target), colour="green", linetype=2)
 
+  # PLOT mps
+
   p2 <- ggplotFL::plot(runs, probs=probs, iter=iter) + facet_wrap(~qname,
-    ncol=2) + ylab(ylab) + geom_vline(xintercept=iyear)
+    ncol=2, dir="v") + ylab(ylab) + geom_vline(xintercept=iyear)
 
   # RPs
   if(!missing(limit))

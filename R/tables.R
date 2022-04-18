@@ -49,8 +49,8 @@ summTable <- function(data,  statistics=unique(data[['statistic']]),
   qtab <- dcast(qdata, mp ~ name, value.var = "fig")
   
   # CALCULATE means
-  mdata <- data[, .(fig=format(mean(data), digits=2, scientific=FALSE, trim=TRUE)),
-    keyby=list(statistic, name, mp)]
+  mdata <- data[, .(fig=format(mean(data, na.rm=TRUE), digits=2,
+    scientific=FALSE, trim=TRUE)), keyby=list(statistic, name, mp)]
   
   mtab <- dcast(mdata, mp ~ name, value.var = "fig")
   
@@ -82,7 +82,7 @@ resTable <- function(data, statistics=unique(data[['statistic']]), ...) {
   desc <- Reduce(rbind, lapply(statistics, function(x) as.data.frame(x[2:3])))
 
   # COMPUTE mean by statistic & mp
-  mdat <- data[, .(data=mean(data)), by=.(statistic, mp, name)]
+  mdat <- data[, .(data=mean(data, na.rm=TRUE)), by=.(statistic, mp, name)]
 
   # MERGE statistics description
   tdat <- merge(mdat, desc, by.x='name', by.y='name')
