@@ -1,36 +1,39 @@
-# mseviz
-- Version: 0.2.5.9001
-- Date: 06-12-2021
-- Author: Iago Mosqueira, EC JRC.
-- Maintainer: Iago Mosqueira, EC JRC.
-- Repository: <https://github.com/iagomosqueira/mseviz/>
-- Bug reports: <https://github.com/iagomosqueira/mseviz/issues>
+
+# mseviz <img src="man/figures/logo.png" align="right" width="120" alt="" />
+
+[![R-CMD-check](https://github.com/flr/mseviz/workflows/R-CMD-check/badge.svg)](https://github.com/flr/mseviz/actions)
+[![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 ## Overview
 Plots and Visualization Tools for Management Strategy Evaluation Results
 
+## Installation
 To install this package, start R and enter:
 
-  library(devtools)
-  install_github("iagomosqueira/mseviz")
+```
+  install.packages("mseviz", repos="http://flr-project.org/R")
+```
+
+or directly from the github repository by using:
+
+```
+  remotes::install_github("flr/mseviz")
+```
 
 ## Documentation
-- Help pages
-- Vignette
 
-## Build Status
-[![Travis Build Status](https://travis-ci.org/iagomosqueira/mseviz.svg?branch=master)](https://travis-ci.org/iagomosqueira/mseviz)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/iagomosqueira/mseviz?branch=master&svg=true)](https://ci.appveyor.com/project/iagomosqueira/mseviz)
-
-## Releases
-- [All releases](https://github.com/iagomosqueira/mseviz/releases/)
+- [Help pages](http://flr-project.org/mseviz)
 
 ## License
-Copyright (c) 2017-18 European Union. European Commission Joint Research Centre D.02. Released under the [EUPL 1.1](https://joinup.ec.europa.eu/community/eupl/og_page/eupl).
+Copyright (c) 2018-2022 European Union, Wageningen University & Research. Released under the [EUPL 1.1](https://joinup.ec.europa.eu/community/eupl/home).
 
 ## Contact
 You are welcome to:
 
-- Submit suggestions and bug-reports at: <https://github.com/iagomosqueira/mseviz/issues>
-- Send a pull request on: <https://github.com/iagomosqueira/mseviz/>
-- Compose a friendly e-mail to: <iago.mosqueira@ec.europa.eu>
+- Submit suggestions and bug-reports at: <https://github.com/flr/mseviz/issues>
+- Send a pull request on: <https://github.com/flr/mseviz/>
+- Compose a friendly e-mail to: <iago.mosqueira AT wur.nl>
+- Author: Iago Mosqueira <iago.mosqueira@wur.nl>
+- Maintainer: Iago Mosqueira <iago.mosqueira@wur.nl>
+
+

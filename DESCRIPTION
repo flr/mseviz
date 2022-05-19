@@ -17,7 +17,7 @@ Suggests:
   rmarkdown,
   markdown
 VignetteBuilder: knitr
-License: file LICENSE
+License: EUPL
 LazyLoad: Yes
 LazyData: No
 BugReports: https://github.com/iagomosqueira/mseviz/issues
