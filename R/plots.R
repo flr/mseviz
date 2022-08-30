@@ -16,6 +16,7 @@
 #' head(perf)
 #' # plot selected statistics
 #' plotBPs(perf, statistics=c("SB0", "FMSY", "green"))
+#' plotBPs(perf, statistics=names(statistics))
 #' # Add targets and limits by statistics, as named vectors
 #' plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
 #'   target=c(SB0=0.40, FMSY=1, green=0.5), limit=c(SB0=0.10))

@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -32,23 +34,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">mseviz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.6</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -65,7 +61,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/iagomosqueira/mseviz/">
+  <a href="https://github.com/iagomosqueira/mseviz/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -82,61 +78,46 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="mseviz" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#mseviz" class="anchor"></a>mseviz</h1></div>
-<ul>
-<li>Version: 0.2.5</li>
-<li>Date: 28-10-2021</li>
-<li>Author: Iago Mosqueira, EC JRC.</li>
-<li>Maintainer: Iago Mosqueira, EC JRC.</li>
-<li>Repository: <a href="https://github.com/iagomosqueira/mseviz/" class="uri">https://github.com/iagomosqueira/mseviz/</a>
-</li>
-<li>Bug reports: <a href="https://github.com/iagomosqueira/mseviz/issues" class="uri">https://github.com/iagomosqueira/mseviz/issues</a>
-</li>
-</ul>
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
+<div class="section level1">
+<div class="page-header"><h1 id="mseviz-">mseviz <img src="reference/figures/logo.png" align="right" width="120" alt=""><a class="anchor" aria-label="anchor" href="#mseviz-"></a>
+</h1></div>
+
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
 <p>Plots and Visualization Tools for Management Strategy Evaluation Results</p>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>To install this package, start R and enter:</p>
-<p>library(devtools) install_github(“iagomosqueira/mseviz”)</p>
+<pre><code><span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mseviz"</span>, repos<span class="op">=</span><span class="st">"http://flr-project.org/R"</span><span class="op">)</span></span></code></pre>
+<p>or directly from the github repository by using:</p>
+<pre><code><span>  <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"flr/mseviz"</span><span class="op">)</span></span></code></pre>
 </div>
-<div id="documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
-<ul>
-<li>Help pages</li>
-<li>Vignette</li>
-</ul>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<ul><li><a href="http://flr-project.org/mseviz" class="external-link">Help pages</a></li></ul>
 </div>
-<div id="build-status" class="section level2">
-<h2 class="hasAnchor">
-<a href="#build-status" class="anchor"></a>Build Status</h2>
-<p><a href="https://travis-ci.org/iagomosqueira/mseviz"><img src="https://travis-ci.org/iagomosqueira/mseviz.svg?branch=master" alt="Travis Build Status"></a> <a href="https://ci.appveyor.com/project/iagomosqueira/mseviz"><img src="https://ci.appveyor.com/api/projects/status/github/iagomosqueira/mseviz?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></p>
+<div class="section level2">
+<h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
+</h2>
+<p>Copyright (c) 2018-2022 European Union, Wageningen University &amp; Research. Released under the <a href="https://joinup.ec.europa.eu/community/eupl/home" class="external-link">EUPL 1.1</a>.</p>
 </div>
-<div id="releases" class="section level2">
-<h2 class="hasAnchor">
-<a href="#releases" class="anchor"></a>Releases</h2>
-<ul>
-<li><a href="https://github.com/iagomosqueira/mseviz/releases/">All releases</a></li>
-</ul>
-</div>
-<div id="license" class="section level2">
-<h2 class="hasAnchor">
-<a href="#license" class="anchor"></a>License</h2>
-<p>Copyright (c) 2017-18 European Union. European Commission Joint Research Centre D.02. Released under the <a href="https://joinup.ec.europa.eu/community/eupl/og_page/eupl">EUPL 1.1</a>.</p>
-</div>
-<div id="contact" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contact" class="anchor"></a>Contact</h2>
+<div class="section level2">
+<h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
+</h2>
 <p>You are welcome to:</p>
 <ul>
-<li>Submit suggestions and bug-reports at: <a href="https://github.com/iagomosqueira/mseviz/issues" class="uri">https://github.com/iagomosqueira/mseviz/issues</a>
+<li>Submit suggestions and bug-reports at: <a href="https://github.com/flr/mseviz/issues" class="external-link uri">https://github.com/flr/mseviz/issues</a>
 </li>
-<li>Send a pull request on: <a href="https://github.com/iagomosqueira/mseviz/" class="uri">https://github.com/iagomosqueira/mseviz/</a>
+<li>Send a pull request on: <a href="https://github.com/flr/mseviz/" class="external-link uri">https://github.com/flr/mseviz/</a>
 </li>
-<li>Compose a friendly e-mail to: <a href="mailto:iago.mosqueira@ec.europa.eu" class="email">iago.mosqueira@ec.europa.eu</a>
+<li>Compose a friendly e-mail to: &lt;iago.mosqueira AT wur.nl&gt;</li>
+<li>Author: Iago Mosqueira <a href="mailto:iago.mosqueira@wur.nl" class="email">iago.mosqueira@wur.nl</a>
+</li>
+<li>Maintainer: Iago Mosqueira <a href="mailto:iago.mosqueira@wur.nl" class="email">iago.mosqueira@wur.nl</a>
 </li>
 </ul>
 </div>
@@ -145,25 +126,40 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/iagomosqueira/mseviz/">https://​github.com/​iagomosqueira/​mseviz/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/iagomosqueira/mseviz/issues">https://​github.com/​iagomosqueira/​mseviz/​issues</a>
-</li>
+<li><a href="https://github.com/iagomosqueira/mseviz/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/iagomosqueira/mseviz/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>file <a href="LICENSE-text.html">LICENSE</a>
-</li>
+<li>EUPL</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing mseviz</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Iago Mosqueira <br><small class="roles"> Author, maintainer </small>  </li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/flr/mseviz/actions" class="external-link"><img src="https://github.com/flr/mseviz/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://www.gnu.org/licenses/gpl-2.0.html" class="external-link"><img src="https://eddelbuettel.github.io/badges/GPL2+.svg" alt="License"></a></li>
 </ul>
 </div>
 
@@ -172,11 +168,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Iago Mosqueira.</p>
+  <p></p>
+<p>Developed by Iago Mosqueira.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -184,6 +182,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -1,6 +1,6 @@
 ---
 title: Standardized Plots for Presentation of MSE Results in IOTC
-author: Iago Mosqueira (EC JRC) <iago.mosqueira@ec.europa.eu>
+author: Iago Mosqueira (WMR) <iago.mosqueira@wur.nl>
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 tags:
 abstract:

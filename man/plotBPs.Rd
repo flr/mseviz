@@ -8,6 +8,7 @@ Figure 3}
 plotBPs(
   data,
   statistics = unique(data$statistic),
+  size = 3,
   target = missing,
   limit = missing,
   yminmax = c(0.1, 0.9),
@@ -24,7 +25,10 @@ data(perf)
 head(perf)
 # plot selected statistics
 plotBPs(perf, statistics=c("SB0", "FMSY", "green"))
-# Add targets and limoits by statistics, as named vectors
+plotBPs(perf, statistics=names(statistics))
+# Add targets and limits by statistics, as named vectors
 plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
   target=c(SB0=0.40, FMSY=1, green=0.5), limit=c(SB0=0.10))
+# size control the diameter of the point behind thin boxplots
+plotBPs(perf, statistics=c("SB0", "FMSY", "green"), size=3)
 }

@@ -39,13 +39,8 @@ runs <- lapply(omps, metrics, metrics=list(F=fbar, SB=ssb, C=catch))
 
 # OM
 om <- metrics(ple4, metrics=list(F=fbar, SB=ssb, C=catch))
-#om <- data.table(as.data.frame(metrics(ple4,
-#  metrics=list(F=fbar, SB=ssb, C=catch)), drop=TRUE))
-# om[, iter:=1]
-#om <- om[,c(1,4,2,3)]
 
 save(om, runs, file="../data/omruns.RData")
-
 
 # PERF
 

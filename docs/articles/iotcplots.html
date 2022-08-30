@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,23 +33,17 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mseviz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.6</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -64,7 +60,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/iagomosqueira/mseviz/">
+  <a href="https://github.com/iagomosqueira/mseviz/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -83,28 +79,28 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Standardized Plots for Presentation of MSE Results in IOTC</h1>
-                        <h4 class="author">Iago Mosqueira (EC JRC) <a href="mailto:iago.mosqueira@ec.europa.eu" class="email">iago.mosqueira@ec.europa.eu</a>
+                        <h4 data-toc-skip class="author">Iago Mosqueira (WMR) <a href="mailto:iago.mosqueira@wur.nl" class="email">iago.mosqueira@wur.nl</a>
 </h4>
             
-            <h4 class="date">29 October, 2021</h4>
+            <h4 data-toc-skip class="date">30 August, 2022</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/iagomosqueira/mseviz/blob/master/vignettes/iotcplots.Rmd"><code>vignettes/iotcplots.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/iagomosqueira/mseviz/blob/HEAD/vignettes/iotcplots.Rmd" class="external-link"><code>vignettes/iotcplots.Rmd</code></a></small>
       <div class="hidden name"><code>iotcplots.Rmd</code></div>
 
     </div>
 
     
     
-<div id="license-creative-commons-attribution-sharealike-4-0-international-public-license" class="section level2">
-<h2 class="hasAnchor">
-<a href="#license-creative-commons-attribution-sharealike-4-0-international-public-license" class="anchor"></a>license: Creative Commons Attribution-ShareAlike 4.0 International Public License</h2>
+<div class="section level3">
+<h3 id="license-creative-commons-attribution-sharealike-4-0-international-public-license">license: Creative Commons Attribution-ShareAlike 4.0 International Public License<a class="anchor" aria-label="anchor" href="#license-creative-commons-attribution-sharealike-4-0-international-public-license"></a>
+</h3>
 </div>
-<div id="inputs" class="section level1">
-<h1 class="hasAnchor">
-<a href="#inputs" class="anchor"></a>Inputs</h1>
-<div id="performance-levels-across-mps" class="section level2">
-<h2 class="hasAnchor">
-<a href="#performance-levels-across-mps" class="anchor"></a>Performance levels across MPs</h2>
+<div class="section level2">
+<h2 id="inputs">Inputs<a class="anchor" aria-label="anchor" href="#inputs"></a>
+</h2>
+<div class="section level3">
+<h3 id="performance-levels-across-mps">Performance levels across MPs<a class="anchor" aria-label="anchor" href="#performance-levels-across-mps"></a>
+</h3>
 <p>These are the necessary columns in the performance <code>data.frame</code></p>
 <ul>
 <li>
@@ -119,22 +115,22 @@
 <li>
 <em>mp</em>, MP name</li>
 </ul>
-<pre><code>##       run statistic year         data iter                 name  mp
-##    1: MP1         C 2038 8.258544e+04    1              mean(C) MP1
-##    2: MP1         C 2038 7.408905e+04    2              mean(C) MP1
-##    3: MP1         C 2038 9.002541e+04    3              mean(C) MP1
-##    4: MP1         C 2038 9.546498e+04    4              mean(C) MP1
-##    5: MP1         C 2038 8.347461e+04    5              mean(C) MP1
-##   ---                                                              
-## 9014: MP6       red 2038 1.000000e+00  249               P(Red) MP6
-## 9015: MP6       red 2038 1.000000e+00  250               P(Red) MP6
-## 9016: MP6     risk1 2038 4.943158e-01    1 mean(P(SB&lt;B[limit])) MP6
-## 9017: MP6     risk2 2038 4.943158e-01    1 once(P(SB&lt;B[limit])) MP6
-## 9018: MP6     risk3 2038 8.160000e-01    1  max(P(SB&gt;B[limit])) MP6</code></pre>
+<pre><code><span><span class="co">##        run statistic year       data iter                 name  mp</span></span>
+<span><span class="co">##     1: MP1      FMSY 2038 0.59017133    1             F/F[MSY] MP1</span></span>
+<span><span class="co">##     2: MP1      FMSY 2038 0.57655002    2             F/F[MSY] MP1</span></span>
+<span><span class="co">##     3: MP1      FMSY 2038 0.59070793    3             F/F[MSY] MP1</span></span>
+<span><span class="co">##     4: MP1      FMSY 2038 0.61176335    4             F/F[MSY] MP1</span></span>
+<span><span class="co">##     5: MP1      FMSY 2038 0.58118303    5             F/F[MSY] MP1</span></span>
+<span><span class="co">##    ---                                                            </span></span>
+<span><span class="co">## 10508: MP6    minSB0 2038 0.07433388  248        min(SB/SB[0]) MP6</span></span>
+<span><span class="co">## 10509: MP6    minSB0 2038 0.10228136  249        min(SB/SB[0]) MP6</span></span>
+<span><span class="co">## 10510: MP6    minSB0 2038 0.07698935  250        min(SB/SB[0]) MP6</span></span>
+<span><span class="co">## 10511: MP6     risk1 2038 0.65915789    1 mean(P(SB&lt;B[limit])) MP6</span></span>
+<span><span class="co">## 10512: MP6     risk2 2038 0.65915789    1 once(P(SB&lt;B[limit])) MP6</span></span></code></pre>
 </div>
-<div id="time-series-of-results-of-mp-runs" class="section level2">
-<h2 class="hasAnchor">
-<a href="#time-series-of-results-of-mp-runs" class="anchor"></a>Time series of results of MP runs</h2>
+<div class="section level3">
+<h3 id="time-series-of-results-of-mp-runs">Time series of results of MP runs<a class="anchor" aria-label="anchor" href="#time-series-of-results-of-mp-runs"></a>
+</h3>
 <ul>
 <li>
 <em>mp</em>, MP name</li>
@@ -146,590 +142,587 @@
 <li>
 <em>qname</em>, computed metric, e.g. Catch (C), mean F (F)</li>
 </ul>
-<pre><code>## $MP1
-## $ F 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008            2009            2010            2011           
-##   all 0.25465(0.0000) 0.12329(0.0193) 0.12485(0.0183) 0.12251(0.0202)
-##      year
-## age   2012            2013            2014            2015           
-##   all 0.12461(0.0173) 0.12599(0.0221) 0.12494(0.0196) 0.12514(0.0180)
-##      year
-## age   2016            2017            2018            2019           
-##   all 0.12580(0.0177) 0.12425(0.0176) 0.12466(0.0166) 0.12539(0.0185)
-##      year
-## age   2020            2021            2022            2023           
-##   all 0.12513(0.0202) 0.12447(0.0199) 0.12745(0.0195) 0.12478(0.0179)
-##      year
-## age   2024            2025            2026            2027           
-##   all 0.12251(0.0172) 0.12305(0.0198) 0.12258(0.0196) 0.12345(0.0176)
-##      year
-## age   2028            2029            2030            2031           
-##   all 0.12462(0.0178) 0.12541(0.0189) 0.12661(0.0178) 0.12397(0.0186)
-##      year
-## age   2032            2033            2034            2035           
-##   all 0.12788(0.0177) 0.12262(0.0206) 0.12126(0.0178) 0.12518(0.0185)
-##      year
-## age   2036            2037            2038           
-##   all 0.12663(0.0187) 0.12527(0.0191) 0.12706(0.0190)
-## 
-## units:  f 
-## 
-## $ SB 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008            2009            2010            2011           
-##   all  371837(     0)  459086(     0)  589596( 15650)  629783( 26392)
-##      year
-## age   2012            2013            2014            2015           
-##   all  708742( 61841)  862374(109551) 1049836(143737) 1047718(179630)
-##      year
-## age   2016            2017            2018            2019           
-##   all 1159479(175678) 1270969(171862) 1373721(183741) 1407257(192905)
-##      year
-## age   2020            2021            2022            2023           
-##   all 1461951(185725) 1480008(178010) 1465906(166245) 1432547(151295)
-##      year
-## age   2024            2025            2026            2027           
-##   all 1405531(138729) 1359418(117100) 1321798(111451) 1283639(104466)
-##      year
-## age   2028            2029            2030            2031           
-##   all 1266069(103749) 1222856( 95473) 1190683( 94784) 1181584( 91978)
-##      year
-## age   2032            2033            2034            2035           
-##   all 1221360( 90457) 1242219(108930) 1321199(149274) 1351195(154687)
-##      year
-## age   2036            2037            2038           
-##   all 1400975(161094) 1476565(185917) 1505554(187105)
-## 
-## units:  t 
-## 
-## $ C 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008          2009          2010          2011          2012         
-##   all 113397(    0)  68016(10364)  80577(11663)  81261(14547)  89761(15579)
-##      year
-## age   2013          2014          2015          2016          2017         
-##   all 105480(27710) 112747(26516) 113736(26429) 110432(24643) 108494(23588)
-##      year
-## age   2018          2019          2020          2021          2022         
-##   all 104532(22927)  99289(21739)  94754(21177)  86526(18885)  81880(16448)
-##      year
-## age   2023          2024          2025          2026          2027         
-##   all  74369(14721)  67702(12607)  63174(11503)  62166(12328)  62105(11890)
-##      year
-## age   2028          2029          2030          2031          2032         
-##   all  61966(12812)  61107(11636)  64801(11971)  70848(14764)  82390(17751)
-##      year
-## age   2033          2034          2035          2036          2037         
-##   all  90232(23192)  92817(22963)  98637(26472) 106643(23378) 106197(25676)
-##      year
-## age   2038         
-##   all 106352(24083)
-## 
-## units:  t 
-## 
-## 
-## $MP2
-## $ F 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008            2009            2010            2011           
-##   all 0.25465(0.0000) 0.19729(0.0322) 0.20090(0.0309) 0.19981(0.0318)
-##      year
-## age   2012            2013            2014            2015           
-##   all 0.19698(0.0293) 0.19775(0.0297) 0.20223(0.0324) 0.20381(0.0270)
-##      year
-## age   2016            2017            2018            2019           
-##   all 0.20327(0.0277) 0.19850(0.0300) 0.19786(0.0280) 0.19908(0.0281)
-##      year
-## age   2020            2021            2022            2023           
-##   all 0.19939(0.0307) 0.19774(0.0315) 0.20070(0.0291) 0.20123(0.0285)
-##      year
-## age   2024            2025            2026            2027           
-##   all 0.20023(0.0287) 0.19730(0.0311) 0.19999(0.0304) 0.20173(0.0330)
-##      year
-## age   2028            2029            2030            2031           
-##   all 0.19629(0.0258) 0.20051(0.0293) 0.20024(0.0281) 0.20140(0.0284)
-##      year
-## age   2032            2033            2034            2035           
-##   all 0.20083(0.0331) 0.19270(0.0275) 0.20126(0.0318) 0.19890(0.0294)
-##      year
-## age   2036            2037            2038           
-##   all 0.20107(0.0299) 0.19993(0.0278) 0.19903(0.0297)
-## 
-## units:  f 
-## 
-## $ SB 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008            2009            2010            2011           
-##   all  371837(     0)  459086(     0)  549599( 18986)  556036( 34958)
-##      year
-## age   2012            2013            2014            2015           
-##   all  597183( 57310)  702744( 96567)  822718(112740)  795332(139931)
-##      year
-## age   2016            2017            2018            2019           
-##   all  879048(133437)  935230(141208)  999798(146053) 1033549(145835)
-##      year
-## age   2020            2021            2022            2023           
-##   all 1064392(150098) 1089162(136958) 1081885(128501) 1066991(123831)
-##      year
-## age   2024            2025            2026            2027           
-##   all 1055782(112101) 1031545(105371) 1014260(103368)  994781( 93574)
-##      year
-## age   2028            2029            2030            2031           
-##   all  985661(102209)  955009( 90174)  940841( 90095)  935522( 81063)
-##      year
-## age   2032            2033            2034            2035           
-##   all  986193( 92348) 1000028(103373) 1071480(135332) 1092203(140277)
-##      year
-## age   2036            2037            2038           
-##   all 1126216(142522) 1196451(154565) 1207329(150247)
-## 
-## units:  t 
-## 
-## $ C 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008          2009          2010          2011          2012         
-##   all 113397(    0) 105049(14512) 115410(16508) 111491(16803) 116853(25962)
-##      year
-## age   2013          2014          2015          2016          2017         
-##   all 131922(33879) 144477(36234) 148612(34659) 142550(33206) 136325(34223)
-##      year
-## age   2018          2019          2020          2021          2022         
-##   all 136006(31806) 136817(29996) 131234(29026) 123478(28602) 116450(21147)
-##      year
-## age   2023          2024          2025          2026          2027         
-##   all 108959(22754)  98911(18495)  95370(18256)  93602(17964)  93029(19961)
-##      year
-## age   2028          2029          2030          2031          2032         
-##   all  90857(16471)  91600(17856)  93280(18804) 106313(19839) 119110(26203)
-##      year
-## age   2033          2034          2035          2036          2037         
-##   all 129445(32844) 141222(35079) 143093(33471) 155812(35983) 152206(36057)
-##      year
-## age   2038         
-##   all 156746(34510)
-## 
-## units:  t 
-## 
-## 
-## $MP3
-## $ F 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008            2009            2010            2011           
-##   all 0.25465(0.0000) 0.27542(0.0417) 0.26630(0.0455) 0.27838(0.0399)
-##      year
-## age   2012            2013            2014            2015           
-##   all 0.26909(0.0442) 0.27502(0.0391) 0.27563(0.0423) 0.26801(0.0411)
-##      year
-## age   2016            2017            2018            2019           
-##   all 0.27664(0.0412) 0.27458(0.0419) 0.27895(0.0404) 0.27426(0.0405)
-##      year
-## age   2020            2021            2022            2023           
-##   all 0.27847(0.0367) 0.27479(0.0443) 0.27723(0.0439) 0.27552(0.0447)
-##      year
-## age   2024            2025            2026            2027           
-##   all 0.27710(0.0394) 0.27310(0.0439) 0.27699(0.0421) 0.27527(0.0413)
-##      year
-## age   2028            2029            2030            2031           
-##   all 0.27537(0.0438) 0.27464(0.0407) 0.26908(0.0368) 0.27411(0.0408)
-##      year
-## age   2032            2033            2034            2035           
-##   all 0.27550(0.0395) 0.27276(0.0387) 0.27810(0.0421) 0.27482(0.0390)
-##      year
-## age   2036            2037            2038           
-##   all 0.27538(0.0358) 0.28226(0.0439) 0.27543(0.0442)
-## 
-## units:  f 
-## 
-## $ SB 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008           2009           2010           2011          
-##   all 371837(     0) 459086(     0) 515804( 23478) 490957( 34168)
-##      year
-## age   2012           2013           2014           2015          
-##   all 507796( 57385) 576373( 80069) 657855( 95577) 616957(124327)
-##      year
-## age   2016           2017           2018           2019          
-##   all 666252( 96049) 699758(109587) 745848(111848) 749862(113404)
-##      year
-## age   2020           2021           2022           2023          
-##   all 775586(117550) 779151(112772) 775568(107222) 761209( 97112)
-##      year
-## age   2024           2025           2026           2027          
-##   all 751596(106500) 729383( 94142) 722913( 89080) 714826( 82305)
-##      year
-## age   2028           2029           2030           2031          
-##   all 704194( 78546) 687538( 71629) 669333( 71638) 682181( 76692)
-##      year
-## age   2032           2033           2034           2035          
-##   all 734716( 88186) 756477( 95228) 812329(124147) 824073(117403)
-##      year
-## age   2036           2037           2038          
-##   all 848085(122535) 898872(142376) 917943(133049)
-## 
-## units:  t 
-## 
-## $ C 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008          2009          2010          2011          2012         
-##   all 113397(    0) 140285(19155) 139153(22701) 131410(23064) 132725(27219)
-##      year
-## age   2013          2014          2015          2016          2017         
-##   all 151577(38388) 154282(40305) 156815(42510) 151391(39737) 150570(36359)
-##      year
-## age   2018          2019          2020          2021          2022         
-##   all 151760(37036) 150689(32133) 150812(32947) 141953(33299) 131633(26959)
-##      year
-## age   2023          2024          2025          2026          2027         
-##   all 124078(26092) 117311(22376) 114558(22610) 109962(23669) 112511(25065)
-##      year
-## age   2028          2029          2030          2031          2032         
-##   all 105947(21240) 106818(21865) 108426(23106) 125587(26835) 144516(33483)
-##      year
-## age   2033          2034          2035          2036          2037         
-##   all 159235(45329) 162688(44276) 174348(45067) 185818(46802) 181375(51161)
-##      year
-## age   2038         
-##   all 191995(40387)
-## 
-## units:  t 
-## 
-## 
-## $MP4
-## $ F 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008            2009            2010            2011           
-##   all 0.25465(0.0000) 0.35105(0.0499) 0.35227(0.0506) 0.35444(0.0519)
-##      year
-## age   2012            2013            2014            2015           
-##   all 0.34712(0.0465) 0.34934(0.0535) 0.35442(0.0540) 0.35172(0.0495)
-##      year
-## age   2016            2017            2018            2019           
-##   all 0.34882(0.0505) 0.34938(0.0560) 0.35477(0.0493) 0.34778(0.0490)
-##      year
-## age   2020            2021            2022            2023           
-##   all 0.34027(0.0497) 0.34610(0.0518) 0.34988(0.0528) 0.35530(0.0506)
-##      year
-## age   2024            2025            2026            2027           
-##   all 0.34691(0.0484) 0.34623(0.0521) 0.34923(0.0474) 0.34996(0.0497)
-##      year
-## age   2028            2029            2030            2031           
-##   all 0.35122(0.0575) 0.34852(0.0516) 0.34211(0.0472) 0.34833(0.0597)
-##      year
-## age   2032            2033            2034            2035           
-##   all 0.35506(0.0567) 0.34943(0.0521) 0.35591(0.0598) 0.34776(0.0488)
-##      year
-## age   2036            2037            2038           
-##   all 0.34990(0.0496) 0.34647(0.0542) 0.34408(0.0531)
-## 
-## units:  f 
-## 
-## $ SB 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008           2009           2010           2011          
-##   all 371837(     0) 459086(     0) 482352( 20987) 431363( 27747)
-##      year
-## age   2012           2013           2014           2015          
-##   all 425616( 47991) 480949( 73525) 529647( 83162) 473811( 90359)
-##      year
-## age   2016           2017           2018           2019          
-##   all 499537( 79371) 507377( 80004) 540028( 92287) 535551( 92180)
-##      year
-## age   2020           2021           2022           2023          
-##   all 545900( 89726) 550071( 96086) 551073( 88176) 531908( 80449)
-##      year
-## age   2024           2025           2026           2027          
-##   all 518602( 81446) 506969( 71565) 498808( 69562) 490059( 73624)
-##      year
-## age   2028           2029           2030           2031          
-##   all 483002( 75303) 463012( 68662) 456468( 63600) 466019( 65695)
-##      year
-## age   2032           2033           2034           2035          
-##   all 516470( 75046) 522702( 82255) 562673(104162) 572510(103273)
-##      year
-## age   2036           2037           2038          
-##   all 598705(101323) 626061(109773) 635236(111896)
-## 
-## units:  t 
-## 
-## $ C 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008          2009          2010          2011          2012         
-##   all 113397(    0) 173392(22982) 162101(21398) 142443(24487) 141216(32872)
-##      year
-## age   2013          2014          2015          2016          2017         
-##   all 156098(40921) 158937(45907) 156291(39355) 152328(37430) 146385(39466)
-##      year
-## age   2018          2019          2020          2021          2022         
-##   all 151632(40069) 152712(39503) 144145(32779) 141271(32750) 132114(28120)
-##      year
-## age   2023          2024          2025          2026          2027         
-##   all 127852(27875) 114350(23259) 112325(27225) 111336(28534) 110776(24192)
-##      year
-## age   2028          2029          2030          2031          2032         
-##   all 105965(24192) 105145(25880) 106609(20340) 130836(30341) 148202(37586)
-##      year
-## age   2033          2034          2035          2036          2037         
-##   all 156261(46107) 162918(43445) 170994(41890) 188174(45895) 182346(48321)
-##      year
-## age   2038         
-##   all 199416(46004)
-## 
-## units:  t 
-## 
-## 
-## $MP5
-## $ F 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008            2009            2010            2011           
-##   all 0.25465(0.0000) 0.43130(0.0527) 0.42651(0.0654) 0.43445(0.0661)
-##      year
-## age   2012            2013            2014            2015           
-##   all 0.42162(0.0633) 0.42868(0.0610) 0.42355(0.0635) 0.41868(0.0613)
-##      year
-## age   2016            2017            2018            2019           
-##   all 0.42447(0.0636) 0.43281(0.0598) 0.43166(0.0568) 0.43134(0.0667)
-##      year
-## age   2020            2021            2022            2023           
-##   all 0.42653(0.0640) 0.42068(0.0602) 0.43018(0.0592) 0.42086(0.0545)
-##      year
-## age   2024            2025            2026            2027           
-##   all 0.43229(0.0642) 0.43271(0.0569) 0.42356(0.0639) 0.42900(0.0651)
-##      year
-## age   2028            2029            2030            2031           
-##   all 0.41689(0.0612) 0.43484(0.0647) 0.43219(0.0616) 0.42499(0.0568)
-##      year
-## age   2032            2033            2034            2035           
-##   all 0.42496(0.0578) 0.42345(0.0584) 0.42431(0.0650) 0.43091(0.0643)
-##      year
-## age   2036            2037            2038           
-##   all 0.42952(0.0625) 0.42445(0.0593) 0.42741(0.0647)
-## 
-## units:  f 
-## 
-## $ SB 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008          2009          2010          2011          2012         
-##   all 371837(    0) 459086(    0) 447896(21256) 383157(29334) 366358(42395)
-##      year
-## age   2013          2014          2015          2016          2017         
-##   all 398992(63280) 426895(68885) 366847(75840) 383509(64578) 378035(64950)
-##      year
-## age   2018          2019          2020          2021          2022         
-##   all 393711(76222) 380738(65692) 380232(72947) 373921(72873) 367404(62347)
-##      year
-## age   2023          2024          2025          2026          2027         
-##   all 355712(62933) 343301(64281) 326229(55438) 320731(53444) 308769(50001)
-##      year
-## age   2028          2029          2030          2031          2032         
-##   all 302692(47540) 289380(45135) 279378(43755) 284367(48823) 319751(57479)
-##      year
-## age   2033          2034          2035          2036          2037         
-##   all 315004(59908) 339607(71640) 347736(68146) 367936(82928) 389099(90417)
-##      year
-## age   2038         
-##   all 387082(89636)
-## 
-## units:  t 
-## 
-## $ C 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008          2009          2010          2011          2012         
-##   all 113397(    0) 202680(21571) 175839(24752) 148681(27189) 141973(32675)
-##      year
-## age   2013          2014          2015          2016          2017         
-##   all 159450(39097) 154363(41825) 151392(42518) 145132(39473) 139489(37712)
-##      year
-## age   2018          2019          2020          2021          2022         
-##   all 140252(33188) 138322(32289) 130277(35402) 124305(30755) 115123(28718)
-##      year
-## age   2023          2024          2025          2026          2027         
-##   all 106726(27996)  99352(22869)  96784(23709)  94547(25116)  92707(24807)
-##      year
-## age   2028          2029          2030          2031          2032         
-##   all  88080(20184)  86942(19589)  90634(21215) 107897(31510) 121441(34627)
-##      year
-## age   2033          2034          2035          2036          2037         
-##   all 127342(33811) 129606(35128) 146024(41316) 159613(45789) 155130(46428)
-##      year
-## age   2038         
-##   all 170691(48072)
-## 
-## units:  t 
-## 
-## 
-## $MP6
-## $ F 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008            2009            2010            2011           
-##   all 0.25465(0.0000) 0.49419(0.0737) 0.48863(0.0796) 0.50284(0.0774)
-##      year
-## age   2012            2013            2014            2015           
-##   all 0.49611(0.0720) 0.50050(0.0749) 0.50661(0.0746) 0.50732(0.0763)
-##      year
-## age   2016            2017            2018            2019           
-##   all 0.49323(0.0754) 0.50145(0.0754) 0.50756(0.0763) 0.50045(0.0727)
-##      year
-## age   2020            2021            2022            2023           
-##   all 0.49678(0.0682) 0.50067(0.0751) 0.49648(0.0765) 0.49398(0.0764)
-##      year
-## age   2024            2025            2026            2027           
-##   all 0.48941(0.0759) 0.51047(0.0729) 0.50075(0.0722) 0.50258(0.0674)
-##      year
-## age   2028            2029            2030            2031           
-##   all 0.50102(0.0734) 0.51390(0.0715) 0.49502(0.0735) 0.50457(0.0679)
-##      year
-## age   2032            2033            2034            2035           
-##   all 0.48060(0.0705) 0.50405(0.0778) 0.50074(0.0703) 0.50293(0.0780)
-##      year
-## age   2036            2037            2038           
-##   all 0.50383(0.0670) 0.49579(0.0765) 0.50622(0.0784)
-## 
-## units:  f 
-## 
-## $ SB 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008          2009          2010          2011          2012         
-##   all 371837(    0) 459086(    0) 422845(30933) 341539(30596) 318874(39344)
-##      year
-## age   2013          2014          2015          2016          2017         
-##   all 338681(56005) 351441(59823) 288299(57258) 292577(54661) 283397(54151)
-##      year
-## age   2018          2019          2020          2021          2022         
-##   all 285733(52592) 273823(57773) 269079(58486) 256467(50845) 243673(51562)
-##      year
-## age   2023          2024          2025          2026          2027         
-##   all 225229(48874) 216054(49553) 203112(42649) 198667(39498) 188838(35312)
-##      year
-## age   2028          2029          2030          2031          2032         
-##   all 180758(35437) 168152(35599) 160604(35448) 162437(39202) 185614(44516)
-##      year
-## age   2033          2034          2035          2036          2037         
-##   all 182987(45202) 191207(50903) 192227(45667) 203370(50857) 214919(56589)
-##      year
-## age   2038         
-##   all 211590(57859)
-## 
-## units:  t 
-## 
-## $ C 
-## An object of class "FLQuant"
-## iters:  250 
-## 
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   2008          2009          2010          2011          2012         
-##   all 113397(    0) 227375(27329) 187578(27897) 149316(27618) 141744(34716)
-##      year
-## age   2013          2014          2015          2016          2017         
-##   all 156775(37488) 150561(46753) 140288(33205) 127372(33806) 121747(32992)
-##      year
-## age   2018          2019          2020          2021          2022         
-##   all 125150(31545) 119363(31002) 110776(31883) 103661(26938)  97146(24085)
-##      year
-## age   2023          2024          2025          2026          2027         
-##   all  87200(22514)  79245(20043)  76951(22349)  75153(19427)  69646(18130)
-##      year
-## age   2028          2029          2030          2031          2032         
-##   all  66201(19349)  64963(17901)  65075(19446)  78328(25044)  84062(28222)
-##      year
-## age   2033          2034          2035          2036          2037         
-##   all  89408(30550)  92952(27637) 100883(34542) 109934(36613) 105515(36490)
-##      year
-## age   2038         
-##   all 121462(40755)
-## 
-## units:  t</code></pre>
+<pre><code><span><span class="co">## $MP1</span></span>
+<span><span class="co">## $ F </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008            2009            2010            2011           </span></span>
+<span><span class="co">##   all 0.25465(0.0000) 0.12314(0.0160) 0.12759(0.0174) 0.12494(0.0187)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2012            2013            2014            2015           </span></span>
+<span><span class="co">##   all 0.12514(0.0168) 0.12644(0.0175) 0.12286(0.0188) 0.12400(0.0159)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2016            2017            2018            2019           </span></span>
+<span><span class="co">##   all 0.12343(0.0182) 0.12662(0.0192) 0.12294(0.0188) 0.12555(0.0172)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2020            2021            2022            2023           </span></span>
+<span><span class="co">##   all 0.12486(0.0174) 0.12509(0.0186) 0.12790(0.0178) 0.12272(0.0198)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2024            2025            2026            2027           </span></span>
+<span><span class="co">##   all 0.12456(0.0185) 0.12285(0.0181) 0.12563(0.0202) 0.12820(0.0175)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028            2029            2030            2031           </span></span>
+<span><span class="co">##   all 0.12373(0.0195) 0.12342(0.0195) 0.12606(0.0187) 0.12701(0.0186)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2032            2033            2034            2035           </span></span>
+<span><span class="co">##   all 0.12757(0.0187) 0.12143(0.0190) 0.12563(0.0167) 0.12923(0.0155)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2036            2037            2038           </span></span>
+<span><span class="co">##   all 0.12284(0.0185) 0.12422(0.0202) 0.12674(0.0196)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  f </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ SB </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008            2009            2010            2011           </span></span>
+<span><span class="co">##   all  371837(     0)  453027(     0)  582677( 17135)  625275( 30569)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2012            2013            2014            2015           </span></span>
+<span><span class="co">##   all  651783( 42993)  729045( 73246)  845056( 83920)  822013( 98939)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2016            2017            2018            2019           </span></span>
+<span><span class="co">##   all  936973(118464) 1088520(170043) 1118046(165496) 1167188(164883)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2020            2021            2022            2023           </span></span>
+<span><span class="co">##   all 1257107(180711) 1307245(175349) 1316329(166398) 1319698(150933)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2024            2025            2026            2027           </span></span>
+<span><span class="co">##   all 1316280(133730) 1343367(126216) 1355785(121470) 1368402(112469)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028            2029            2030            2031           </span></span>
+<span><span class="co">##   all 1374571( 97940) 1381085( 97619) 1390094(117249) 1367645(130039)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2032            2033            2034            2035           </span></span>
+<span><span class="co">##   all 1324418(117130) 1300473(115580) 1302518(110695) 1296430(103308)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2036            2037            2038           </span></span>
+<span><span class="co">##   all 1270546(107064) 1250996(106361) 1224262(107354)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ C </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008          2009          2010          2011          2012         </span></span>
+<span><span class="co">##   all 113397(    0)  67302( 8619)  80576(12071)  75230(13517)  75065(15012)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2013          2014          2015          2016          2017         </span></span>
+<span><span class="co">##   all  73232(16877)  75493(14691)  85242(19291)  92448(25136)  89231(22911)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2018          2019          2020          2021          2022         </span></span>
+<span><span class="co">##   all  92490(20822)  95989(19997)  92442(18279)  86622(19634)  82357(17985)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2023          2024          2025          2026          2027         </span></span>
+<span><span class="co">##   all  77194(13021)  79123(15033)  79619(17847)  82544(17339)  85177(18215)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028          2029          2030          2031          2032         </span></span>
+<span><span class="co">##   all  85122(14881)  82728(17957)  76954(17665)  72677(14259)  69808(14307)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2033          2034          2035          2036          2037         </span></span>
+<span><span class="co">##   all  66231(11253)  70929(14007)  71370(13808)  69515(13293)  66613(14041)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2038         </span></span>
+<span><span class="co">##   all  72646(12730)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $MP2</span></span>
+<span><span class="co">## $ F </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008            2009            2010            2011           </span></span>
+<span><span class="co">##   all 0.25465(0.0000) 0.20450(0.0269) 0.20376(0.0299) 0.19800(0.0326)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2012            2013            2014            2015           </span></span>
+<span><span class="co">##   all 0.20313(0.0279) 0.20030(0.0311) 0.19746(0.0296) 0.20037(0.0301)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2016            2017            2018            2019           </span></span>
+<span><span class="co">##   all 0.19703(0.0296) 0.19896(0.0302) 0.19608(0.0296) 0.20489(0.0303)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2020            2021            2022            2023           </span></span>
+<span><span class="co">##   all 0.20207(0.0312) 0.20065(0.0260) 0.20123(0.0279) 0.19973(0.0255)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2024            2025            2026            2027           </span></span>
+<span><span class="co">##   all 0.19609(0.0298) 0.19926(0.0249) 0.20428(0.0297) 0.19590(0.0297)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028            2029            2030            2031           </span></span>
+<span><span class="co">##   all 0.19926(0.0281) 0.20125(0.0300) 0.19876(0.0307) 0.20005(0.0283)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2032            2033            2034            2035           </span></span>
+<span><span class="co">##   all 0.20292(0.0292) 0.19809(0.0288) 0.20396(0.0305) 0.20168(0.0311)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2036            2037            2038           </span></span>
+<span><span class="co">##   all 0.19770(0.0303) 0.19750(0.0298) 0.19566(0.0301)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  f </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ SB </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008            2009            2010            2011           </span></span>
+<span><span class="co">##   all  371837(     0)  453027(     0)  542400( 19657)  544817( 28103)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2012            2013            2014            2015           </span></span>
+<span><span class="co">##   all  535180( 36090)  572422( 56775)  655067( 66838)  620780( 83769)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2016            2017            2018            2019           </span></span>
+<span><span class="co">##   all  697294( 96139)  795980(126084)  811021(134765)  846163(138978)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2020            2021            2022            2023           </span></span>
+<span><span class="co">##   all  914778(145598)  949421(135810)  948191(137989)  958774(123116)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2024            2025            2026            2027           </span></span>
+<span><span class="co">##   all  963992(112420) 1006855(113126) 1031554(111710) 1055915( 99033)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028            2029            2030            2031           </span></span>
+<span><span class="co">##   all 1072351( 91341) 1084219( 89144) 1094166(105997) 1072784(113269)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2032            2033            2034            2035           </span></span>
+<span><span class="co">##   all 1039242(103949) 1027289(106812) 1021563( 95701) 1032968( 88803)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2036            2037            2038           </span></span>
+<span><span class="co">##   all 1007738( 91935)  992766( 91536)  964660( 92373)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ C </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008          2009          2010          2011          2012         </span></span>
+<span><span class="co">##   all 113397(    0) 107131(13003) 113895(13649) 102165(19336)  96665(20690)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2013          2014          2015          2016          2017         </span></span>
+<span><span class="co">##   all  88818(21072)  94740(19740) 113035(25131) 117721(32063) 110936(26169)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2018          2019          2020          2021          2022         </span></span>
+<span><span class="co">##   all 117531(25998) 124102(27191) 125728(28436) 117476(28397) 108978(21845)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2023          2024          2025          2026          2027         </span></span>
+<span><span class="co">##   all 109608(19518) 114915(22985) 119934(27225) 123656(27627) 125174(24424)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028          2029          2030          2031          2032         </span></span>
+<span><span class="co">##   all 131288(25966) 125097(32777) 116250(26661) 105307(21611) 102632(20780)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2033          2034          2035          2036          2037         </span></span>
+<span><span class="co">##   all 102509(17900) 104697(21011) 104137(22477) 100909(22701)  97434(18640)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2038         </span></span>
+<span><span class="co">##   all 105990(19144)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $MP3</span></span>
+<span><span class="co">## $ F </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008            2009            2010            2011           </span></span>
+<span><span class="co">##   all 0.25465(0.0000) 0.27642(0.0401) 0.27574(0.0459) 0.27697(0.0382)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2012            2013            2014            2015           </span></span>
+<span><span class="co">##   all 0.27100(0.0395) 0.27022(0.0414) 0.27023(0.0411) 0.27654(0.0389)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2016            2017            2018            2019           </span></span>
+<span><span class="co">##   all 0.27755(0.0379) 0.27600(0.0411) 0.27481(0.0406) 0.28054(0.0415)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2020            2021            2022            2023           </span></span>
+<span><span class="co">##   all 0.26694(0.0370) 0.27745(0.0375) 0.27317(0.0376) 0.27492(0.0408)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2024            2025            2026            2027           </span></span>
+<span><span class="co">##   all 0.27720(0.0393) 0.27432(0.0342) 0.27343(0.0381) 0.26656(0.0392)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028            2029            2030            2031           </span></span>
+<span><span class="co">##   all 0.26852(0.0441) 0.27376(0.0383) 0.27155(0.0389) 0.26931(0.0375)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2032            2033            2034            2035           </span></span>
+<span><span class="co">##   all 0.27816(0.0376) 0.27196(0.0425) 0.27534(0.0395) 0.26974(0.0419)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2036            2037            2038           </span></span>
+<span><span class="co">##   all 0.27829(0.0414) 0.27906(0.0395) 0.27196(0.0431)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  f </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ SB </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008           2009           2010           2011          </span></span>
+<span><span class="co">##   all 371837(     0) 453027(     0) 508566( 23613) 481550( 32508)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2012           2013           2014           2015          </span></span>
+<span><span class="co">##   all 446583( 36733) 466658( 54351) 521291( 58409) 486877( 71221)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2016           2017           2018           2019          </span></span>
+<span><span class="co">##   all 534035( 78701) 592715( 94918) 596637( 96519) 603232( 90344)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2020           2021           2022           2023          </span></span>
+<span><span class="co">##   all 644952(102404) 663895(102547) 662514(101124) 682850( 94999)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2024           2025           2026           2027          </span></span>
+<span><span class="co">##   all 681652( 90203) 719683( 94315) 731536( 93339) 757350(103010)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028           2029           2030           2031          </span></span>
+<span><span class="co">##   all 782487( 98879) 790234( 91734) 805886(107363) 779666( 97662)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2032           2033           2034           2035          </span></span>
+<span><span class="co">##   all 751719( 87924) 750552( 90096) 753198( 97266) 767207( 92022)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2036           2037           2038          </span></span>
+<span><span class="co">##   all 744508(104866) 737201( 96738) 713669( 90317)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ C </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008          2009          2010          2011          2012         </span></span>
+<span><span class="co">##   all 113397(    0) 139616(17306) 139514(19722) 118275(19574) 103673(23261)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2013          2014          2015          2016          2017         </span></span>
+<span><span class="co">##   all  97545(20001) 104504(21164) 122585(30546) 126261(32141) 116377(27679)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2018          2019          2020          2021          2022         </span></span>
+<span><span class="co">##   all 125604(28119) 133101(30704) 131990(31427) 126119(29167) 119572(25538)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2023          2024          2025          2026          2027         </span></span>
+<span><span class="co">##   all 126833(24900) 136173(26887) 137934(29252) 142617(31239) 148415(29838)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028          2029          2030          2031          2032         </span></span>
+<span><span class="co">##   all 151845(31859) 147396(31572) 133428(32126) 121326(25894) 120810(23500)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2033          2034          2035          2036          2037         </span></span>
+<span><span class="co">##   all 123004(25445) 127492(32156) 122431(29828) 122246(31535) 113511(24281)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2038         </span></span>
+<span><span class="co">##   all 126604(25556)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $MP4</span></span>
+<span><span class="co">## $ F </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008            2009            2010            2011           </span></span>
+<span><span class="co">##   all 0.25465(0.0000) 0.35626(0.0476) 0.34748(0.0512) 0.35281(0.0494)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2012            2013            2014            2015           </span></span>
+<span><span class="co">##   all 0.34878(0.0536) 0.35307(0.0511) 0.34677(0.0493) 0.34362(0.0554)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2016            2017            2018            2019           </span></span>
+<span><span class="co">##   all 0.35731(0.0537) 0.34998(0.0467) 0.34698(0.0524) 0.34756(0.0588)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2020            2021            2022            2023           </span></span>
+<span><span class="co">##   all 0.34547(0.0544) 0.34530(0.0539) 0.35026(0.0503) 0.34506(0.0503)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2024            2025            2026            2027           </span></span>
+<span><span class="co">##   all 0.35552(0.0514) 0.34258(0.0544) 0.35479(0.0528) 0.34617(0.0527)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028            2029            2030            2031           </span></span>
+<span><span class="co">##   all 0.34603(0.0496) 0.35170(0.0532) 0.34542(0.0504) 0.34736(0.0531)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2032            2033            2034            2035           </span></span>
+<span><span class="co">##   all 0.35088(0.0501) 0.33789(0.0478) 0.35252(0.0541) 0.35734(0.0479)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2036            2037            2038           </span></span>
+<span><span class="co">##   all 0.35238(0.0476) 0.34690(0.0511) 0.34855(0.0499)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  f </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ SB </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008          2009          2010          2011          2012         </span></span>
+<span><span class="co">##   all 371837(    0) 453027(    0) 474582(22090) 424702(31442) 374967(33095)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2013          2014          2015          2016          2017         </span></span>
+<span><span class="co">##   all 373779(45843) 408776(52345) 373567(62834) 396907(64282) 426395(82250)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2018          2019          2020          2021          2022         </span></span>
+<span><span class="co">##   all 418517(73931) 424248(72370) 456484(79871) 457377(85122) 445537(87244)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2023          2024          2025          2026          2027         </span></span>
+<span><span class="co">##   all 456981(86155) 462324(83196) 498816(83019) 502947(84958) 509365(75609)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028          2029          2030          2031          2032         </span></span>
+<span><span class="co">##   all 528648(72379) 537948(81839) 541645(84277) 510212(78232) 499017(64627)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2033          2034          2035          2036          2037         </span></span>
+<span><span class="co">##   all 501240(73044) 510800(82724) 518883(86020) 504186(81079) 488672(84259)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2038         </span></span>
+<span><span class="co">##   all 474705(76092)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ C </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008          2009          2010          2011          2012         </span></span>
+<span><span class="co">##   all 113397(    0) 173210(19547) 159593(22689) 128470(20539) 109475(23760)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2013          2014          2015          2016          2017         </span></span>
+<span><span class="co">##   all 100887(23863) 106952(23301) 119392(29978) 121370(34608) 107848(29037)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2018          2019          2020          2021          2022         </span></span>
+<span><span class="co">##   all 118914(25581) 128545(33729) 129441(28731) 117928(29186) 115447(25655)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2023          2024          2025          2026          2027         </span></span>
+<span><span class="co">##   all 117426(25047) 132689(32028) 134003(33546) 141006(34133) 147050(31611)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028          2029          2030          2031          2032         </span></span>
+<span><span class="co">##   all 150574(34388) 145568(40132) 127931(30351) 119668(27056) 119356(26479)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2033          2034          2035          2036          2037         </span></span>
+<span><span class="co">##   all 120674(24209) 124347(31582) 124375(30031) 118716(28012) 109520(23650)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2038         </span></span>
+<span><span class="co">##   all 132415(29837)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $MP5</span></span>
+<span><span class="co">## $ F </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008            2009            2010            2011           </span></span>
+<span><span class="co">##   all 0.25465(0.0000) 0.42073(0.0686) 0.42765(0.0618) 0.42482(0.0645)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2012            2013            2014            2015           </span></span>
+<span><span class="co">##   all 0.42768(0.0579) 0.41594(0.0661) 0.42080(0.0620) 0.43135(0.0666)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2016            2017            2018            2019           </span></span>
+<span><span class="co">##   all 0.42530(0.0565) 0.42161(0.0654) 0.41747(0.0645) 0.42512(0.0574)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2020            2021            2022            2023           </span></span>
+<span><span class="co">##   all 0.42233(0.0555) 0.43788(0.0699) 0.43394(0.0661) 0.42513(0.0595)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2024            2025            2026            2027           </span></span>
+<span><span class="co">##   all 0.42899(0.0589) 0.42912(0.0614) 0.43314(0.0630) 0.41766(0.0583)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028            2029            2030            2031           </span></span>
+<span><span class="co">##   all 0.42497(0.0631) 0.41749(0.0597) 0.42132(0.0634) 0.43124(0.0616)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2032            2033            2034            2035           </span></span>
+<span><span class="co">##   all 0.42389(0.0621) 0.42359(0.0638) 0.41625(0.0655) 0.42083(0.0635)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2036            2037            2038           </span></span>
+<span><span class="co">##   all 0.42289(0.0659) 0.43151(0.0699) 0.41661(0.0556)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  f </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ SB </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008          2009          2010          2011          2012         </span></span>
+<span><span class="co">##   all 371837(    0) 453027(    0) 448370(29412) 381961(30360) 320015(29556)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2013          2014          2015          2016          2017         </span></span>
+<span><span class="co">##   all 309444(40826) 335579(45402) 294249(49081) 302319(51066) 312186(61757)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2018          2019          2020          2021          2022         </span></span>
+<span><span class="co">##   all 303143(51938) 299868(52002) 313031(59164) 308123(57079) 296542(60802)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2023          2024          2025          2026          2027         </span></span>
+<span><span class="co">##   all 291975(52700) 295091(60247) 311378(58973) 313357(61245) 321393(58584)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028          2029          2030          2031          2032         </span></span>
+<span><span class="co">##   all 334612(65023) 334878(66227) 327491(68893) 311172(63910) 306735(59105)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2033          2034          2035          2036          2037         </span></span>
+<span><span class="co">##   all 302076(56183) 304126(64788) 309186(66042) 291451(65472) 285038(59796)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2038         </span></span>
+<span><span class="co">##   all 272779(54913)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ C </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008          2009          2010          2011          2012         </span></span>
+<span><span class="co">##   all 113397(    0) 198286(26888) 175004(23164) 133657(21106) 109232(21333)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2013          2014          2015          2016          2017         </span></span>
+<span><span class="co">##   all  96545(19254) 106951(26507) 115970(28528) 113772(32821)  96898(24677)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2018          2019          2020          2021          2022         </span></span>
+<span><span class="co">##   all 105633(27596) 116581(31292) 112461(27947) 101857(27962)  98711(24225)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2023          2024          2025          2026          2027         </span></span>
+<span><span class="co">##   all 101349(22879) 111352(31353) 112341(31856) 116815(28606) 121562(26259)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028          2029          2030          2031          2032         </span></span>
+<span><span class="co">##   all 124414(34354) 116879(35293) 106509(31003)  98157(25572)  98426(26860)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2033          2034          2035          2036          2037         </span></span>
+<span><span class="co">##   all 100567(25557) 103085(25218)  97234(27142)  93127(24725)  86194(25468)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2038         </span></span>
+<span><span class="co">##   all 106374(29279)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $MP6</span></span>
+<span><span class="co">## $ F </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008            2009            2010            2011           </span></span>
+<span><span class="co">##   all 0.25465(0.0000) 0.49403(0.0714) 0.50693(0.0773) 0.50772(0.0693)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2012            2013            2014            2015           </span></span>
+<span><span class="co">##   all 0.50096(0.0814) 0.50321(0.0703) 0.50087(0.0743) 0.48586(0.0634)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2016            2017            2018            2019           </span></span>
+<span><span class="co">##   all 0.50244(0.0670) 0.50414(0.0751) 0.49946(0.0760) 0.49498(0.0738)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2020            2021            2022            2023           </span></span>
+<span><span class="co">##   all 0.49927(0.0692) 0.50714(0.0738) 0.49202(0.0684) 0.50412(0.0736)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2024            2025            2026            2027           </span></span>
+<span><span class="co">##   all 0.50612(0.0711) 0.49976(0.0782) 0.50396(0.0807) 0.49296(0.0773)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028            2029            2030            2031           </span></span>
+<span><span class="co">##   all 0.49764(0.0735) 0.51119(0.0741) 0.50878(0.0760) 0.48662(0.0636)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2032            2033            2034            2035           </span></span>
+<span><span class="co">##   all 0.49930(0.0709) 0.49626(0.0697) 0.50335(0.0798) 0.48284(0.0742)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2036            2037            2038           </span></span>
+<span><span class="co">##   all 0.50215(0.0740) 0.50291(0.0737) 0.49466(0.0750)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  f </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ SB </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008          2009          2010          2011          2012         </span></span>
+<span><span class="co">##   all 371837(    0) 453027(    0) 416504(27656) 336124(30843) 269906(25717)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2013          2014          2015          2016          2017         </span></span>
+<span><span class="co">##   all 254203(30119) 268875(37835) 234227(38714) 230304(36993) 229092(41730)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2018          2019          2020          2021          2022         </span></span>
+<span><span class="co">##   all 216466(38980) 206415(37968) 217714(43856) 206749(41037) 191902(38345)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2023          2024          2025          2026          2027         </span></span>
+<span><span class="co">##   all 191669(36898) 188155(40449) 198522(43054) 190487(41760) 189869(39155)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028          2029          2030          2031          2032         </span></span>
+<span><span class="co">##   all 192824(40921) 190658(42214) 184496(46020) 171907(41152) 165803(39601)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2033          2034          2035          2036          2037         </span></span>
+<span><span class="co">##   all 166610(38796) 165141(40993) 165758(38916) 152133(36996) 146507(37579)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2038         </span></span>
+<span><span class="co">##   all 137291(35159)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ C </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## iters:  250 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2008          2009          2010          2011          2012         </span></span>
+<span><span class="co">##   all 113397(    0) 224836(25217) 187472(27253) 134125(21524) 105361(22459)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2013          2014          2015          2016          2017         </span></span>
+<span><span class="co">##   all  94265(20242)  98855(22963) 105892(29555) 100288(27365)  81842(23743)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2018          2019          2020          2021          2022         </span></span>
+<span><span class="co">##   all  90725(23439)  97051(27988)  92210(23747)  82404(22936)  76308(19574)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2023          2024          2025          2026          2027         </span></span>
+<span><span class="co">##   all  79300(20090)  85611(22309)  84910(21881)  86655(23650)  87790(24364)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2028          2029          2030          2031          2032         </span></span>
+<span><span class="co">##   all  90715(25734)  84713(25844)  72229(24015)  67302(19809)  68986(20737)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2033          2034          2035          2036          2037         </span></span>
+<span><span class="co">##   all  69439(21047)  72671(23437)  64451(19226)  60656(18609)  57070(18611)</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2038         </span></span>
+<span><span class="co">##   all  74044(23130)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t</span></span></code></pre>
 </div>
-<div id="time-series-of-om-history" class="section level2">
-<h2 class="hasAnchor">
-<a href="#time-series-of-om-history" class="anchor"></a>Time series of OM history</h2>
+<div class="section level3">
+<h3 id="time-series-of-om-history">Time series of OM history<a class="anchor" aria-label="anchor" href="#time-series-of-om-history"></a>
+</h3>
 <ul>
 <li><em>year</em></li>
 <li>
@@ -739,135 +732,135 @@
 <li>
 <em>qname</em>, computed metric, e.g. Catch (C), mean F (F)</li>
 </ul>
-<pre><code>## $ F 
-## An object of class "FLQuant"
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   1957    1958    1959    1960    1961    1962    1963    1964    1965   
-##   all 0.24168 0.27866 0.31084 0.32448 0.32519 0.33559 0.36653 0.39417 0.38771
-##      year
-## age   1966    1967    1968    1969    1970    1971    1972    1973    1974   
-##   all 0.36207 0.34807 0.35412 0.36429 0.36324 0.36702 0.39909 0.45156 0.48039
-##      year
-## age   1975    1976    1977    1978    1979    1980    1981    1982    1983   
-##   all 0.46091 0.43693 0.44859 0.48847 0.52582 0.54200 0.54057 0.52644 0.51509
-##      year
-## age   1984    1985    1986    1987    1988    1989    1990    1991    1992   
-##   all 0.52277 0.55052 0.58629 0.61605 0.62993 0.62175 0.60550 0.60009 0.60749
-##      year
-## age   1993    1994    1995    1996    1997    1998    1999    2000    2001   
-##   all 0.61025 0.59803 0.59798 0.64233 0.71240 0.72432 0.65004 0.58241 0.57161
-##      year
-## age   2002    2003    2004    2005    2006    2007    2008    2009    2010   
-##   all 0.59392 0.57077 0.47697 0.38686 0.33299 0.29622 0.25465 0.21573 0.19643
-##      year
-## age   2011    2012    2013    2014    2015    2016    2017   
-##   all 0.19815 0.20738 0.20971 0.20537 0.20084 0.19878 0.19871
-## 
-## units:  f 
-## 
-## $ SB 
-## An object of class "FLQuant"
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   1957   1958   1959   1960   1961   1962   1963   1964   1965   1966  
-##   all 342223 355375 362119 380052 391386 482245 440658 430475 383583 404516
-##      year
-## age   1967   1968   1969   1970   1971   1972   1973   1974   1975   1976  
-##   all 473938 458977 402865 370472 361610 366129 302365 298094 301757 328726
-##      year
-## age   1977   1978   1979   1980   1981   1982   1983   1984   1985   1986  
-##   all 329116 327544 302271 319090 290780 284211 339238 367251 394666 407972
-##      year
-## age   1987   1988   1989   1990   1991   1992   1993   1994   1995   1996  
-##   all 470952 424696 448230 396458 356947 311431 279962 233481 222203 203391
-##      year
-## age   1997   1998   1999   2000   2001   2002   2003   2004   2005   2006  
-##   all 204948 237863 219149 230902 234211 221902 248312 233478 253737 284447
-##      year
-## age   2007   2008   2009   2010   2011   2012   2013   2014   2015   2016  
-##   all 293330 371837 453026 554245 575459 617539 709948 823276 774157 836453
-##      year
-## age   2017  
-##   all 913290
-## 
-## units:  t 
-## 
-## $ C 
-## An object of class "FLQuant"
-## , , unit = unique, season = all, area = unique
-## 
-##      year
-## age   1957   1958   1959   1960   1961   1962   1963   1964   1965   1966  
-##   all  78360  88785 105186 117975 119541 126290 140815 147540 151408 162266
-##      year
-## age   1967   1968   1969   1970   1971   1972   1973   1974   1975   1976  
-##   all 154474 149820 146178 136619 141226 149390 151515 157994 165392 175881
-##      year
-## age   1977   1978   1979   1980   1981   1982   1983   1984   1985   1986  
-##   all 165843 178166 172652 184690 184494 192439 212632 228265 247071 279228
-##      year
-## age   1987   1988   1989   1990   1991   1992   1993   1994   1995   1996  
-##   all 308480 315245 292035 250604 218184 192691 179573 151248 132629 131719
-##      year
-## age   1997   1998   1999   2000   2001   2002   2003   2004   2005   2006  
-##   all 152195 171240 170662 145998 128107 143807 154029 140056 114551 111864
-##      year
-## age   2007   2008   2009   2010   2011   2012   2013   2014   2015   2016  
-##   all 104770 113397 115703 118824 119718 131872 141055 139750 137338 131216
-##      year
-## age   2017  
-##   all 124922
-## 
-## units:  t</code></pre>
+<pre><code><span><span class="co">## $ F </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1957    1958    1959    1960    1961    1962    1963    1964    1965   </span></span>
+<span><span class="co">##   all 0.24168 0.27866 0.31084 0.32448 0.32519 0.33559 0.36653 0.39417 0.38771</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1966    1967    1968    1969    1970    1971    1972    1973    1974   </span></span>
+<span><span class="co">##   all 0.36207 0.34807 0.35412 0.36429 0.36324 0.36702 0.39909 0.45156 0.48039</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1975    1976    1977    1978    1979    1980    1981    1982    1983   </span></span>
+<span><span class="co">##   all 0.46091 0.43693 0.44859 0.48847 0.52582 0.54200 0.54057 0.52644 0.51509</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1984    1985    1986    1987    1988    1989    1990    1991    1992   </span></span>
+<span><span class="co">##   all 0.52277 0.55052 0.58629 0.61605 0.62993 0.62175 0.60550 0.60009 0.60749</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1993    1994    1995    1996    1997    1998    1999    2000    2001   </span></span>
+<span><span class="co">##   all 0.61025 0.59803 0.59798 0.64233 0.71240 0.72432 0.65004 0.58241 0.57161</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2002    2003    2004    2005    2006    2007    2008    2009    2010   </span></span>
+<span><span class="co">##   all 0.59392 0.57077 0.47697 0.38686 0.33299 0.29622 0.25465 0.21573 0.19643</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2011    2012    2013    2014    2015    2016    2017   </span></span>
+<span><span class="co">##   all 0.19815 0.20738 0.20971 0.20537 0.20084 0.19878 0.19871</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  f </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ SB </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1957   1958   1959   1960   1961   1962   1963   1964   1965   1966  </span></span>
+<span><span class="co">##   all 342223 355375 362119 380052 391386 482245 440658 430475 383583 404516</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1967   1968   1969   1970   1971   1972   1973   1974   1975   1976  </span></span>
+<span><span class="co">##   all 473938 458977 402865 370472 361610 366129 302365 298094 301757 328726</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1977   1978   1979   1980   1981   1982   1983   1984   1985   1986  </span></span>
+<span><span class="co">##   all 329116 327544 302271 319090 290780 284211 339238 367251 394666 407972</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1987   1988   1989   1990   1991   1992   1993   1994   1995   1996  </span></span>
+<span><span class="co">##   all 470952 424696 448230 396458 356947 311431 279962 233481 222203 203391</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1997   1998   1999   2000   2001   2002   2003   2004   2005   2006  </span></span>
+<span><span class="co">##   all 204948 237863 219149 230902 234211 221902 248312 233478 253737 284447</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2007   2008   2009   2010   2011   2012   2013   2014   2015   2016  </span></span>
+<span><span class="co">##   all 293330 371837 453026 554245 575459 617539 709948 823276 774157 836453</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2017  </span></span>
+<span><span class="co">##   all 913290</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $ C </span></span>
+<span><span class="co">## An object of class "FLQuant"</span></span>
+<span><span class="co">## , , unit = unique, season = all, area = unique</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1957   1958   1959   1960   1961   1962   1963   1964   1965   1966  </span></span>
+<span><span class="co">##   all  78360  88785 105186 117975 119541 126290 140815 147540 151408 162266</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1967   1968   1969   1970   1971   1972   1973   1974   1975   1976  </span></span>
+<span><span class="co">##   all 154474 149820 146178 136619 141226 149390 151515 157994 165392 175881</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1977   1978   1979   1980   1981   1982   1983   1984   1985   1986  </span></span>
+<span><span class="co">##   all 165843 178166 172652 184690 184494 192439 212632 228265 247071 279228</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1987   1988   1989   1990   1991   1992   1993   1994   1995   1996  </span></span>
+<span><span class="co">##   all 308480 315245 292035 250604 218184 192691 179573 151248 132629 131719</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   1997   1998   1999   2000   2001   2002   2003   2004   2005   2006  </span></span>
+<span><span class="co">##   all 152195 171240 170662 145998 128107 143807 154029 140056 114551 111864</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2007   2008   2009   2010   2011   2012   2013   2014   2015   2016  </span></span>
+<span><span class="co">##   all 104770 113397 115703 118824 119718 131872 141055 139750 137338 131216</span></span>
+<span><span class="co">##      year</span></span>
+<span><span class="co">## age   2017  </span></span>
+<span><span class="co">##   all 124922</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## units:  t</span></span></code></pre>
 </div>
 </div>
-<div id="standard-iotc-mse-plots" class="section level1">
-<h1 class="hasAnchor">
-<a href="#standard-iotc-mse-plots" class="anchor"></a>Standard IOTC MSE plots</h1>
-<div id="plotbps-indicators-boxplots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plotbps-indicators-boxplots" class="anchor"></a>plotBPs, indicators boxplots</h2>
+<div class="section level2">
+<h2 id="standard-iotc-mse-plots">Standard IOTC MSE plots<a class="anchor" aria-label="anchor" href="#standard-iotc-mse-plots"></a>
+</h2>
+<div class="section level3">
+<h3 id="plotbps-indicators-boxplots">plotBPs, indicators boxplots<a class="anchor" aria-label="anchor" href="#plotbps-indicators-boxplots"></a>
+</h3>
 <p><img src="iotcplots_files/figure-html/plotbps-1.png" width="480"></p>
 </div>
-<div id="plottos-trade-off-plots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plottos-trade-off-plots" class="anchor"></a>plotTOs, trade-off plots</h2>
+<div class="section level3">
+<h3 id="plottos-trade-off-plots">plotTOs, trade-off plots<a class="anchor" aria-label="anchor" href="#plottos-trade-off-plots"></a>
+</h3>
 <p><img src="iotcplots_files/figure-html/plottos-1.png" width="480"></p>
 </div>
-<div id="kobemps-performance-on-kobe-plot" class="section level2">
-<h2 class="hasAnchor">
-<a href="#kobemps-performance-on-kobe-plot" class="anchor"></a>kobeMPs, performance on Kobe plot</h2>
+<div class="section level3">
+<h3 id="kobemps-performance-on-kobe-plot">kobeMPs, performance on Kobe plot<a class="anchor" aria-label="anchor" href="#kobemps-performance-on-kobe-plot"></a>
+</h3>
 <p><img src="iotcplots_files/figure-html/kobemps-1.png" width="480"></p>
 </div>
-<div id="kobe2mps" class="section level2">
-<h2 class="hasAnchor">
-<a href="#kobe2mps" class="anchor"></a>kobe2MPs,</h2>
+<div class="section level3">
+<h3 id="kobe2mps">kobe2MPs,<a class="anchor" aria-label="anchor" href="#kobe2mps"></a>
+</h3>
 </div>
-<div id="plotomruns-time-series-of-om-and-mps" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plotomruns-time-series-of-om-and-mps" class="anchor"></a>plotOMruns, time series of OM and MPs</h2>
+<div class="section level3">
+<h3 id="plotomruns-time-series-of-om-and-mps">plotOMruns, time series of OM and MPs<a class="anchor" aria-label="anchor" href="#plotomruns-time-series-of-om-and-mps"></a>
+</h3>
 <p><img src="iotcplots_files/figure-html/plotomrunsf-1.png" width="480"></p>
 <p><img src="iotcplots_files/figure-html/plotomrunsc-1.png" width="480"></p>
 </div>
 </div>
-<div id="iotc-mse-output-tables" class="section level1">
-<h1 class="hasAnchor">
-<a href="#iotc-mse-output-tables" class="anchor"></a>IOTC MSE output tables</h1>
-<div id="perftable" class="section level2">
-<h2 class="hasAnchor">
-<a href="#perftable" class="anchor"></a>perftable</h2>
+<div class="section level2">
+<h2 id="iotc-mse-output-tables">IOTC MSE output tables<a class="anchor" aria-label="anchor" href="#iotc-mse-output-tables"></a>
+</h2>
+<div class="section level3">
+<h3 id="perftable">perftable<a class="anchor" aria-label="anchor" href="#perftable"></a>
+</h3>
 </div>
-<div id="fullperftable" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fullperftable" class="anchor"></a>fullperftable</h2>
+<div class="section level3">
+<h3 id="fullperftable">fullperftable<a class="anchor" aria-label="anchor" href="#fullperftable"></a>
+</h3>
 </div>
 </div>
-<div id="references" class="section level1">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 </div>
   </div>
 
@@ -882,11 +875,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Iago Mosqueira.</p>
+  <p></p>
+<p>Developed by Iago Mosqueira.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -894,6 +889,8 @@
 
   
 
+
+  
 
   </body>
 </html>
