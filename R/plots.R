@@ -24,7 +24,8 @@
 #' plotBPs(perf, statistics=c("SB0", "FMSY", "green"), size=3)
 
 plotBPs <- function(data, statistics=unique(data$statistic), size=3,
-  target=missing, limit=missing, yminmax=c(0.10, 0.90), lowupp=c(0.25, 0.75)) {
+  target=missing, limit=missing, yminmax=c(0.10, 0.90), lowupp=c(0.25, 0.75),
+  show.mean=NULL) {
 
   # CHECK quantiles
   if(any(c(length(yminmax), length(lowupp)) != 2))
@@ -41,11 +42,20 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
   # ORDER mp as in input
   data[, mp:=factor(mp, levels=unique(mp))]
 
-  dat <- data[, .(ymin=quantile(data, yminmax[1], na.rm=TRUE),
+  dat <- data[, .(
+    ymin=quantile(data, yminmax[1], na.rm=TRUE),
     lower=quantile(data, lowupp[1], na.rm=TRUE),
-    # middle=median(data, na.rm=TRUE), upper=quantile(data, lowupp[2], na.rm=TRUE),
-    middle=mean(data, na.rm=TRUE), upper=quantile(data, lowupp[2], na.rm=TRUE),
-    ymax=quantile(data, yminmax[2], na.rm=TRUE)), by=.(mp, statistic, name)]
+    middle=median(data, na.rm=TRUE),
+    upper=quantile(data, lowupp[2], na.rm=TRUE),
+    ymax=quantile(data, yminmax[2], na.rm=TRUE)),
+  by=.(mp, statistic, name)]
+
+  # MEAN for show.mean statistics
+  if(!is.null(show.mean)) {
+    midt <- data[statistic %in% show.mean, .(middle=mean(data, na.rm=TRUE)),
+      by=.(mp, statistic, name)]$middle
+    dat[statistic %in% show.mean, middle:=midt]
+  }
 
   # PLOT
   p <- ggplot(dat,
@@ -54,7 +64,8 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
     # data ~ mp, colour by mp
     # PLOT point by mp, useful if boxplot is very thin
     geom_point(data=dat[, .(middle=mean(middle)), by=.(mp, name)],
-      aes(x=mp, y=middle), colour="black", size=size + size*0.20, inherit.aes=FALSE) +
+      aes(x=mp, y=middle), colour="black", size=size + size*0.20,
+      inherit.aes=FALSE) +
     geom_point(data=dat[, .(middle=mean(middle)), by=.(mp, name)],
       aes(x=mp, y=middle, colour=mp), size=size, inherit.aes=FALSE) +
     # PLOT boxplot by mp
