@@ -15,13 +15,17 @@
 #' # A data.table of performance statistics per run,
 #' head(perf)
 #' # plot selected statistics
-#' plotBPs(perf, statistics=c("SB0", "FMSY", "green"))
-#' plotBPs(perf, statistics=names(statistics))
+#' plotBPs(perf, statistics=c("SB0", "FMSY", "green")) +
+#'   scale_fill_flr()
 #' # Add targets and limits by statistics, as named vectors
 #' plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
 #'   target=c(SB0=0.40, FMSY=1, green=0.5), limit=c(SB0=0.10))
-#' # size control the diameter of the point behind thin boxplots
+#' # size controls the diameter of the point behind thin boxplots
 #' plotBPs(perf, statistics=c("SB0", "FMSY", "green"), size=3)
+#' # Signal MPs by type (color) and target level (hue)
+#' plotBPs(perf, statistics=c("SB0", "FMSY", "green")) +
+#' scale_fill_manual(values=c("#f70e4a", "#fa537d", "#fc98b1",
+#'  "#1189af", "#30beeb", "#83d8f3"))
 
 plotBPs <- function(data, statistics=unique(data$statistic), size=3,
   target=missing, limit=missing, yminmax=c(0.10, 0.90), lowupp=c(0.25, 0.75),
@@ -35,10 +39,9 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
   data <- data[statistic %in% statistics,]
   
   # ORDER name as of statistics
-  cols <- unique(data[,c('statistic','name')])
-  data[, name:=factor(name, levels=cols$name[match(cols$statistic, statistics)],
-    ordered=TRUE)]
-  
+  data <- data[, name:=factor(name, levels=unique(name)[match(statistics,
+    unique(statistic))], ordered=TRUE)]
+
   # ORDER mp as in input
   data[, mp:=factor(mp, levels=unique(mp))]
 
@@ -64,10 +67,10 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
     # data ~ mp, colour by mp
     # PLOT point by mp, useful if boxplot is very thin
     geom_point(data=dat[, .(middle=mean(middle)), by=.(mp, name)],
-      aes(x=mp, y=middle), colour="black", size=size + size*0.20,
+      aes(x=mp, y=middle), colour="black", size=size + size * 0.20,
       inherit.aes=FALSE) +
     geom_point(data=dat[, .(middle=mean(middle)), by=.(mp, name)],
-      aes(x=mp, y=middle, colour=mp), size=size, inherit.aes=FALSE) +
+      aes(x=mp, y=middle, fill=mp), shape=21, size=size, inherit.aes=FALSE) +
     # PLOT boxplot by mp
     geom_boxplot(stat="identity") +
     # PANELS per statistics
@@ -133,8 +136,10 @@ plotTOs <- function(data, x=unique(data$statistic)[1],
   p <- ggplot(dat, aes(x=!!xsyms[[2]], y=!!ysyms[[2]])) +
     xlab(unique(datx$name)) + ylab("") +
   # PLOT lines
-  geom_linerange(aes(ymin=!!ysyms[[1]], ymax=!!ysyms[[3]]), size=size, alpha=alpha) +
-  geom_linerange(aes(xmin=!!xsyms[[1]], xmax=!!xsyms[[3]]), size=size, alpha=alpha) +
+  geom_linerange(aes(ymin=!!ysyms[[1]], ymax=!!ysyms[[3]]), size=size,
+    alpha=alpha) +
+  geom_linerange(aes(xmin=!!xsyms[[1]], xmax=!!xsyms[[3]]), size=size, 
+    alpha=alpha) +
   # PLOT median dots
   geom_point(aes(fill=mp), shape=21, size=4) +
   facet_wrap(~name, scales="free_y") +
