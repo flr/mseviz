@@ -15,11 +15,16 @@
 #' # A data.table of performance statistics per run,
 #' head(perf)
 #' # plot selected statistics
+#' plotBPs(perf, statistics=c("SB0", "FMSY", "green"))
+#' # Use FLR's own colourblind-friendly palette
 #' plotBPs(perf, statistics=c("SB0", "FMSY", "green")) +
 #'   scale_fill_flr()
 #' # Add targets and limits by statistics, as named vectors
 #' plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
 #'   target=c(SB0=0.40, FMSY=1, green=0.5), limit=c(SB0=0.10))
+#' # Add references inm gray
+#' plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
+#'   reference=c(SB0=0.50))
 #' # size controls the diameter of the point behind thin boxplots
 #' plotBPs(perf, statistics=c("SB0", "FMSY", "green"), size=3)
 #' # Signal MPs by type (color) and target level (hue)
@@ -28,8 +33,8 @@
 #'  "#1189af", "#30beeb", "#83d8f3"))
 
 plotBPs <- function(data, statistics=unique(data$statistic), size=3,
-  target=missing, limit=missing, yminmax=c(0.10, 0.90), lowupp=c(0.25, 0.75),
-  show.mean=NULL) {
+  target=missing, limit=missing, reference=missing,
+  yminmax=c(0.10, 0.90), lowupp=c(0.25, 0.75), show.mean=NULL) {
 
   # CHECK quantiles
   if(any(c(length(yminmax), length(lowupp)) != 2))
@@ -95,6 +100,14 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
     dat <- data[statistic %in% names(limit),]
     dat[, limit:=unlist(limit)[match(statistic, names(limit))]]
     p <- p + geom_hline(data=dat, aes(yintercept=limit), colour="red",
+      linetype="longdash", size=1)
+  }
+
+  # REFERENCE
+  if(!missing(reference)) {
+    dat <- data[statistic %in% names(reference),]
+    dat[, reference:=unlist(reference)[match(statistic, names(reference))]]
+    p <- p + geom_hline(data=dat, aes(yintercept=reference), colour="gray",
       linetype="longdash", size=1)
   }
 
@@ -264,8 +277,14 @@ plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
   if(!missing(target))
     p1 <- p1 + geom_hline(aes(yintercept=target), colour="green", linetype=2)
 
-  # PLOT mps
+  # iters
+  if(length(iter) == 1) {
+    iter <- unname(unlist(lapply(quantile(c(om[, ac(dims(om)$maxyear)]),
+      probs=seq(0.05, 0.95, length=iter)), function(i)
+      which.min(abs(c(om[, ac(dims(om)$maxyear)]) - i)))))
+  }
 
+  # PLOT mps
   p2 <- ggplotFL::plot(runs, probs=probs, iter=iter) + facet_wrap(~qname,
     ncol=2, dir="v") + ylab(ylab) + geom_vline(xintercept=iyear)
 
