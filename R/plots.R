@@ -79,7 +79,7 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
     # PLOT boxplot by mp
     geom_boxplot(stat="identity") +
     # PANELS per statistics
-    facet_wrap(~name, scales='free_y') +
+    facet_wrap(~name, scales='free_y', labeller="label_parsed") +
     xlab("") + ylab("") +
     # DELETE x-axis labels, LEGEND in 6th panel
     # TODO legend pos by no. of panels
