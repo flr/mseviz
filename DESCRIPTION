@@ -1,6 +1,6 @@
 Package: mseviz
 Title: Plots and Visualization Tools for Management Strategy Evaluation Results
-Version: 0.2.6.9003
+Version: 0.2.6.9004
 Authors@R: c(person(given = "Iago", family = "Mosqueira", role = c("aut", "cre"),
   email = "iago.mosqueira@wur.nl"))
 Description: A set of plots and visualization tools to explore and present the
@@ -20,4 +20,4 @@ License: EUPL
 LazyLoad: Yes
 LazyData: No
 BugReports: https://github.com/iagomosqueira/mseviz/issues
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3

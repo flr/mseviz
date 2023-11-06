@@ -147,7 +147,7 @@ plotTOs <- function(data, x=unique(data$statistic)[1],
   dat <- cbind(daty, datx[,-(1:4)])
  
   p <- ggplot(dat, aes(x=!!xsyms[[2]], y=!!ysyms[[2]])) +
-    xlab(unique(datx$name)) + ylab("") +
+    xlab(parse(text=unique(datx$name))) + ylab("") +
   # PLOT lines
   geom_linerange(aes(ymin=!!ysyms[[1]], ymax=!!ysyms[[3]]), size=size,
     alpha=alpha) +
@@ -155,7 +155,7 @@ plotTOs <- function(data, x=unique(data$statistic)[1],
     alpha=alpha) +
   # PLOT median dots
   geom_point(aes(fill=mp), shape=21, size=4) +
-  facet_wrap(~name, scales="free_y") +
+  facet_wrap(~name, scales="free_y", labeller="label_parsed") +
   scale_shape(solid=FALSE) + theme(legend.title=element_blank())
 
   return(p)

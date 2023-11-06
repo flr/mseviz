@@ -11,8 +11,10 @@ plotBPs(
   size = 3,
   target = missing,
   limit = missing,
+  reference = missing,
   yminmax = c(0.1, 0.9),
-  lowupp = c(0.25, 0.75)
+  lowupp = c(0.25, 0.75),
+  show.mean = NULL
 )
 }
 \description{
@@ -25,10 +27,19 @@ data(perf)
 head(perf)
 # plot selected statistics
 plotBPs(perf, statistics=c("SB0", "FMSY", "green"))
-plotBPs(perf, statistics=names(statistics))
+# Use FLR's own colourblind-friendly palette
+plotBPs(perf, statistics=c("SB0", "FMSY", "green")) +
+  scale_fill_flr()
 # Add targets and limits by statistics, as named vectors
 plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
   target=c(SB0=0.40, FMSY=1, green=0.5), limit=c(SB0=0.10))
-# size control the diameter of the point behind thin boxplots
+# Add references inm gray
+plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
+  reference=c(SB0=0.50))
+# size controls the diameter of the point behind thin boxplots
 plotBPs(perf, statistics=c("SB0", "FMSY", "green"), size=3)
+# Signal MPs by type (color) and target level (hue)
+plotBPs(perf, statistics=c("SB0", "FMSY", "green")) +
+scale_fill_manual(values=c("#f70e4a", "#fa537d", "#fc98b1",
+ "#1189af", "#30beeb", "#83d8f3"))
 }
