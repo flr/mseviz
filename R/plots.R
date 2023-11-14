@@ -261,7 +261,8 @@ kobeTS <- function(perfts) {
 # plotOMruns {{{
 
 plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
-  probs=c(0.10, 0.25, 0.50, 0.75, 0.90), iyear=dims(om)$maxyear, ylab="", ylim="missing") {
+  probs=c(0.10, 0.25, 0.50, 0.75, 0.90), iyear=dims(om)$maxyear,
+  ylab="", ylim="missing") {
 
   # CHECK classses
   if(!is(om, "FLQuant") | !is(runs, "FLQuants"))
@@ -285,8 +286,9 @@ plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
   }
 
   # PLOT mps
-  p2 <- ggplotFL::plot(runs, probs=probs, iter=iter) + facet_wrap(~qname,
-    ncol=2, dir="v") + ylab(ylab) + geom_vline(xintercept=iyear)
+  p2 <- ggplotFL::plot(runs, probs=probs, iter=iter) +
+    facet_wrap(~qname, ncol=2, dir="v") +
+    ylab(ylab) + geom_vline(xintercept=iyear)
 
   # RPs
   if(!missing(limit))
