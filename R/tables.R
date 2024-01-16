@@ -42,7 +42,7 @@ summTable <- function(data,  statistics=unique(data[['statistic']]),
     keyby=list(statistic, name, mp)]
   
   qdata[, fig:=paste0(
-    format(round(`50%`, 2), digits=1, scientific=FALSE, trim=TRUE), " (",
+    format(round(`50%`, 2), digits=2, scientific=FALSE, trim=TRUE), " (",
     format(round(`10%`, 2), digits=1, trim=TRUE, scientific=FALSE), "-",
     format(round(`90%`, 2), digits=1, trim=TRUE, scientific=FALSE), ")")]
  
@@ -55,7 +55,9 @@ summTable <- function(data,  statistics=unique(data[['statistic']]),
   mtab <- dcast(mdata, mp ~ name, value.var = "fig")
   
   # ASSEMBLE table
-  tab <- cbind(qtab[,1], qtab[,4], mtab[,2], mtab[,3], qtab[,6], mtab[,5])
+  # tab <- cbind(qtab[,1], qtab[,4], mtab[,2], mtab[,3], qtab[,6], mtab[,5])
+
+  tab <- qtab
   
   # RANK by row
   qrank <- dcast(qdata, mp ~ name, value.var = "50%")
