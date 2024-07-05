@@ -33,7 +33,7 @@
 #'  "#1189af", "#30beeb", "#83d8f3"))
 
 plotBPs <- function(data, statistics=unique(data$statistic), size=3,
-  target=missing, limit=missing, reference=missing,
+  target=missing, limit=missing, reference=missing, changes=NULL,
   yminmax=c(0.10, 0.90), lowupp=c(0.25, 0.75), show.mean=NULL) {
 
   # CHECK quantiles
@@ -56,7 +56,22 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
     middle=median(data, na.rm=TRUE),
     upper=quantile(data, lowupp[2], na.rm=TRUE),
     ymax=quantile(data, yminmax[2], na.rm=TRUE)),
-  by=.(mp, statistic, name)]
+  by=.(mp, statistic, name, year)]
+
+  # APPLY changes
+#  if(!is.null(changes)) {
+#    dat[, year := ifelse(year == names(changes), unlist(changes), year)]
+#    dat[, name := ifelse(name == names(changes), unlist(changes), name)]
+#  }
+
+  # MERGE name + year if needed
+  id <- dat[, length(unique(year)) == 2, by=name]
+  dat[name %in% as.character(id[id$V1, name]),
+    name := as.character(paste0(name, " (", year, ")"))]
+
+  # TODO: DROP long
+  dat[grepl('long', name), name:=sub(" \\(long\\)", "", name)]
+  dat[grepl('short', name), name:=sub("\\(short\\)", "(Short term)", name)]
 
   # MEAN for show.mean statistics
   if(!is.null(show.mean)) {
@@ -89,24 +104,27 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
 
   # TARGET
   if(!missing(target)) {
-    dat <- data[statistic %in% names(target),]
-    dat[, target:=unlist(target)[match(statistic, names(target))]]
+    nms <- names(target)
+    dat <- data[statistic %in% nms,]
+    dat[, target:=unlist(target)[match(statistic, nms)]]
     p <- p + geom_hline(data=dat, aes(yintercept=target), colour="green",
       linetype="longdash", size=1)
   }
   
   # LIMIT
   if(!missing(limit)) {
-    dat <- data[statistic %in% names(limit),]
-    dat[, limit:=unlist(limit)[match(statistic, names(limit))]]
+    nms <- names(limit)
+    dat <- data[statistic %in% nms,]
+    dat[, limit:=unlist(limit)[match(statistic, nms)]]
     p <- p + geom_hline(data=dat, aes(yintercept=limit), colour="red",
       linetype="longdash", size=1)
   }
 
   # REFERENCE
   if(!missing(reference)) {
-    dat <- data[statistic %in% names(reference),]
-    dat[, reference:=unlist(reference)[match(statistic, names(reference))]]
+    nms <- names(reference)
+    dat <- data[statistic %in% nms,]
+    dat[, reference:=unlist(reference)[match(statistic, nms)]]
     p <- p + geom_hline(data=dat, aes(yintercept=reference), colour="gray",
       linetype="longdash", size=1)
   }
@@ -120,7 +138,7 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
 #' Figure 4
 #' @examples
 #' data(perf)
-#' plotTOs(perf, x="C", y=c("SBMSY", "FMSY", "green", "SB0"))
+#' plotTOs(perf, x="C", y=c("FMSY", "risk1", "SB0"))
 
 plotTOs <- function(data, x=unique(data$statistic)[1],
   y=setdiff(unique(data$statistic), x), probs=c(0.10, 0.50, 0.90),
@@ -304,3 +322,5 @@ plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
   return(p)
 
 } # }}}
+
+# plotPerformance
