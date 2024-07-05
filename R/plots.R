@@ -107,7 +107,7 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
   if(!missing(target)) {
     nms <- names(target)
     dat <- data[statistic %in% nms,]
-    dat[, target:=unlist(target)[match(statistic, nms)]]
+    dat[, target:=unlist(..target)[match(statistic, nms)]]
     p <- p + geom_hline(data=dat, aes(yintercept=target), colour="green",
       linetype="longdash", size=1)
   }
@@ -116,7 +116,7 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
   if(!missing(limit)) {
     nms <- names(limit)
     dat <- data[statistic %in% nms,]
-    dat[, limit:=unlist(limit)[match(statistic, nms)]]
+    dat[, limit:=unlist(..limit)[match(statistic, nms)]]
     p <- p + geom_hline(data=dat, aes(yintercept=limit), colour="red",
       linetype="longdash", size=1)
   }
