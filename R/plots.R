@@ -90,7 +90,7 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
       aes(x=mp, y=middle), colour="black", size=size + size * 0.20,
       inherit.aes=FALSE) +
     geom_point(data=dat[, .(middle=mean(middle)), by=.(mp, name)],
-      aes(x=mp, y=middle, fill=mp, colour=mp), shape=21, size=size,
+      aes(x=mp, y=middle, fill=mp, colour=NULL), shape=21, size=size,
       inherit.aes=FALSE) +
     # PLOT boxplot by mp
     geom_boxplot(stat="identity") +
