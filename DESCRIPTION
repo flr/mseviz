@@ -1,6 +1,6 @@
 Package: mseviz
 Title: Plots and Visualization Tools for Management Strategy Evaluation Results
-Version: 0.2.6.9006
+Version: 0.2.6.9008
 Authors@R: c(person(given = "Iago", family = "Mosqueira", role = c("aut", "cre"),
   email = "iago.mosqueira@wur.nl"))
 Description: A set of plots and visualization tools to explore and present the
