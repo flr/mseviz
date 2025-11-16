@@ -1,10 +1,12 @@
 # plots.R - DESC
-# ioalbmse/R/plots.R
+# mseviz/R/plots.R
 
 # Copyright European Union, 2015-2016
 # Author: Iago Mosqueira (EC JRC) <iago.mosqueira@ec.europa.eu>
 #
 # Distributed under the terms of the European Union Public Licence (EUPL) V.1.1.
+
+# - PLOT from performance
 
 # plotBPs {{{
 
@@ -12,122 +14,129 @@
 #' Figure 3
 #' @examples
 #' data(perf)
-#' # A data.table of performance statistics per run,
+# A data.table of performance statistics per run,
 #' head(perf)
-#' # plot selected statistics
-#' plotBPs(perf, statistics=c("SB0", "FMSY", "green"))
+# plot selected statistics
+#' plotBPs(perf, statistics = c("SB0", "FMSY", "green"))
 #' # Use FLR's own colourblind-friendly palette
-#' plotBPs(perf, statistics=c("SB0", "FMSY", "green")) +
+#' plotBPs(perf, statistics = c("SB0", "FMSY", "green")) +
 #'   scale_fill_flr()
 #' # Add targets and limits by statistics, as named vectors
-#' plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
-#'   target=c(SB0=0.40, FMSY=1, green=0.5), limit=c(SB0=0.10))
+#' plotBPs(perf,
+#'   statistics = c("SB0", "FMSY", "green"),
+#'   target = c(SB0 = 0.40, FMSY = 1, green = 0.5), limit = c(SB0 = 0.10)
+#' )
 #' # Add references inm gray
-#' plotBPs(perf, statistics=c("SB0", "FMSY", "green"),
-#'   reference=c(SB0=0.50))
+#' plotBPs(perf,
+#'   statistics = c("SB0", "FMSY", "green"),
+#'   reference = c(SB0 = 0.50)
+#' )
 #' # size controls the diameter of the point behind thin boxplots
-#' plotBPs(perf, statistics=c("SB0", "FMSY", "green"), size=3)
+#' plotBPs(perf, statistics = c("SB0", "FMSY", "green"), size = 3)
 #' # Signal MPs by type (color) and target level (hue)
-#' plotBPs(perf, statistics=c("SB0", "FMSY", "green")) +
-#' scale_fill_manual(values=c("#f70e4a", "#fa537d", "#fc98b1",
-#'  "#1189af", "#30beeb", "#83d8f3"))
-
-plotBPs <- function(data, statistics=unique(data$statistic), size=3,
-  target=missing, limit=missing, reference=missing, changes=NULL,
-  yminmax=c(0.10, 0.90), lowupp=c(0.25, 0.75), show.mean=NULL) {
+#' plotBPs(perf, statistics = c("SB0", "FMSY", "green")) +
+#'   scale_fill_manual(values = c(
+#'     "#f70e4a", "#fa537d", "#fc98b1",
+#'     "#1189af", "#30beeb", "#83d8f3"
+#'   ))
+plotBPs <- function(
+  data, statistics = unique(data$statistic), size = 3,
+  target = missing, limit = missing, reference = missing,
+  yminmax = c(0.10, 0.90), lowupp = c(0.25, 0.75), show.mean = NULL) {
 
   # CHECK quantiles
-  if(any(c(length(yminmax), length(lowupp)) != 2))
+  if (any(c(length(yminmax), length(lowupp)) != 2)) {
     stop("'yminmax' and 'lowupp' must be both of length 2")
-
-  # SUBSET statistics
-  data <- data[statistic %in% statistics,]
+  }
   
-  # ORDER name as of statistics
-  data <- data[, name:=factor(name, levels=unique(name)[match(statistics,
-    unique(statistic))], ordered=TRUE)]
+  # SET label if missing
+  if (is.null(data[["label"]])) {
+    data[, label := mp]
+  }
 
-  # ORDER mp as in input
-  data[, mp:=factor(mp, levels=unique(mp))]
+  # ORDER label as in input
+  data[, label := factor(label, levels = unique(label))]
+  
+  # SUBSET statistics
+  data <- data[statistic %in% statistics, ]
+
+  # ORDER name as of statistics
+  data <- data[, name := factor(name, levels = unique(name)[match(statistics,
+    unique(statistic))], ordered = TRUE)]
 
   dat <- data[, .(
-    ymin=quantile(data, yminmax[1], na.rm=TRUE),
-    lower=quantile(data, lowupp[1], na.rm=TRUE),
-    middle=median(data, na.rm=TRUE),
-    upper=quantile(data, lowupp[2], na.rm=TRUE),
-    ymax=quantile(data, yminmax[2], na.rm=TRUE)),
-  by=.(mp, statistic, name, year)]
-
-  # APPLY changes
-#  if(!is.null(changes)) {
-#    dat[, year := ifelse(year == names(changes), unlist(changes), year)]
-#    dat[, name := ifelse(name == names(changes), unlist(changes), name)]
-#  }
+    ymin = quantile(data, yminmax[1], na.rm = TRUE),
+    lower = quantile(data, lowupp[1], na.rm = TRUE),
+    middle = median(data, na.rm = TRUE),
+    upper = quantile(data, lowupp[2], na.rm = TRUE),
+    ymax = quantile(data, yminmax[2], na.rm = TRUE)),
+  by = .(label, statistic, name, year)]
 
   # MERGE name + year if needed
-  id <- dat[, length(unique(year)) == 2, by=name]
+  id <- dat[, length(unique(year)) == 2, by = name]
   dat[name %in% as.character(id[id$V1, name]),
     name := as.character(paste0(name, " (", year, ")"))]
 
-  # TODO: DROP long
-  dat[grepl('long', name), name:=sub(" \\(long\\)", "", name)]
-  dat[grepl('short', name), name:=sub("\\(short\\)", "(Short term)", name)]
-
   # MEAN for show.mean statistics
-  if(!is.null(show.mean)) {
-    midt <- data[statistic %in% show.mean, .(middle=mean(data, na.rm=TRUE)),
-      by=.(mp, statistic, name)]$middle
-    dat[statistic %in% show.mean, middle:=midt]
+  if (!is.null(show.mean)) {
+    midt <- data[statistic %in% show.mean, .(middle = mean(data, na.rm = TRUE)),
+      by = .(label, statistic, name)]$middle
+    dat[statistic %in% show.mean, middle := midt]
   }
 
   # PLOT
-  p <- ggplot(dat,
-    aes(x=mp, ymin=ymin, lower=lower, middle=middle,
-      upper=upper, ymax=ymax, fill=mp)) +
-    # data ~ mp, colour by mp
-    # PLOT point by mp, useful if boxplot is very thin
-    geom_point(data=dat[, .(middle=mean(middle)), by=.(mp, name)],
-      aes(x=mp, y=middle), colour="black", size=size + size * 0.20,
-      inherit.aes=FALSE) +
-    geom_point(data=dat[, .(middle=mean(middle)), by=.(mp, name)],
-      aes(x=mp, y=middle, fill=mp, colour=NULL), shape=21, size=size,
-      inherit.aes=FALSE) +
-    # PLOT boxplot by mp
-    geom_boxplot(stat="identity") +
+  p <- ggplot(dat, aes(x = label, ymin = ymin, lower = lower, middle = middle,
+      upper = upper, ymax = ymax, fill = label, group=label)) +
+    # data ~ label, colour by label
+    # PLOT point by label, useful if boxplot is very thin
+    geom_point(data = dat[, .(middle = mean(middle)), by = .(label, name)],
+      aes(x = label, y = middle), colour = "black", size = size * 1.20,
+      inherit.aes = FALSE) +
+    geom_point(data = dat[, .(middle = mean(middle)), by = .(label, name)],
+      aes(x = label, y = middle, fill = label, colour = NULL), shape = 21, size = size,
+      inherit.aes = FALSE) +
+    # PLOT boxplot by label
+    geom_boxplot(stat = "identity") +
     # PANELS per statistics
-    facet_wrap(~name, scales='free_y', labeller="label_parsed") +
+    facet_wrap(~name, scales = "free_y", labeller = "label_parsed") +
+    # DELETE axis labels, LEGEND in 6th panel
     xlab("") + ylab("") +
-    # DELETE x-axis labels, LEGEND in 6th panel
     # TODO legend pos by no. of panels
-    theme(axis.text.x=element_blank(), legend.position=c("right"),
-    # DELETE legend title
-    legend.title=element_blank())
+    theme(axis.text.x = element_blank(), legend.position = c("right"),
+      # DELETE legend title
+      legend.title = element_blank())
 
   # TARGET
-  if(!missing(target)) {
+  if (!missing(target)) {
     nms <- names(target)
-    dat <- data[statistic %in% nms,]
-    dat[, target:=unlist(..target)[match(statistic, nms)]]
-    p <- p + geom_hline(data=dat, aes(yintercept=target), colour="green",
-      linetype="longdash", size=1)
+    dat <- data[statistic %in% nms, ]
+    dat[, target := unlist(..target)[match(statistic, nms)]]
+    p <- p + geom_hline(
+      data = dat, aes(yintercept = target), colour = "green",
+      linetype = "longdash", size = 1
+    )
   }
-  
+
   # LIMIT
-  if(!missing(limit)) {
+  if (!missing(limit)) {
     nms <- names(limit)
-    dat <- data[statistic %in% nms,]
-    dat[, limit:=unlist(..limit)[match(statistic, nms)]]
-    p <- p + geom_hline(data=dat, aes(yintercept=limit), colour="red",
-      linetype="longdash", size=1)
+    dat <- data[statistic %in% nms, ]
+    dat[, limit := unlist(..limit)[match(statistic, nms)]]
+    p <- p + geom_hline(
+      data = dat, aes(yintercept = limit), colour = "red",
+      linetype = "longdash", size = 1
+    )
   }
 
   # REFERENCE
-  if(!missing(reference)) {
+  if (!missing(reference)) {
     nms <- names(reference)
-    dat <- data[statistic %in% nms,]
-    dat[, reference:=unlist(reference)[match(statistic, nms)]]
-    p <- p + geom_hline(data=dat, aes(yintercept=reference), colour="gray",
-      linetype="longdash", size=1)
+    dat <- data[statistic %in% nms, ]
+    dat[, reference := unlist(reference)[match(statistic, nms)]]
+    p <- p + geom_hline(
+      data = dat, aes(yintercept = reference), colour = "gray",
+      linetype = "longdash", size = 1
+    )
   }
 
   return(p)
@@ -139,43 +148,55 @@ plotBPs <- function(data, statistics=unique(data$statistic), size=3,
 #' Figure 4
 #' @examples
 #' data(perf)
-#' plotTOs(perf, x="C", y=c("FMSY", "risk1", "SB0"))
+#' plotTOs(perf, x = "C", y = c("FMSY", "risk1", "SB0"))
 
-plotTOs <- function(data, x=unique(data$statistic)[1],
-  y=setdiff(unique(data$statistic), x), probs=c(0.10, 0.50, 0.90),
-   size=0.50, alpha=0.75) {
+plotTOs <- function(  data, x = unique(data$statistic)[1],
+  y = setdiff(unique(data$statistic), x), probs = c(0.10, 0.50, 0.90),
+  size = 0.50, linewidth=size, alpha = 0.75) {
+
+  # SET label if missing
+  if (is.null(data[["label"]])) {
+    data[, label := mp]
+  }
+
+  # ORDER label as in input
+  data[, label := factor(label, levels = unique(label))]
   
-  # ORDER mp as in input
-  data[, mp:=factor(mp, levels=unique(mp))]
-
   # CALCULATE quantiles
-  data <- data[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
-    keyby=list(statistic, name, year, mp)]
+  data <- data[, as.list(quantile(data, probs = probs, na.rm = TRUE)),
+    keyby = list(statistic, name, year, label)
+  ]
 
   # LABELS probs
   xsyms <- syms(paste0("x", probs))
   ysyms <- syms(paste0("y", probs))
 
   # SUBSET statistics
-  daty <- data[statistic %in% y,]
+  daty <- data[statistic %in% y, ]
   setnames(daty, seq(5, 4 + length(probs)), paste0("y", probs))
-  datx <- data[statistic %in% x,]
+  datx <- data[statistic %in% x, ]
   setnames(datx, seq(5, 4 + length(probs)), paste0("x", probs))
-  
+
   # MERGE x into y
-  dat <- cbind(daty, datx[,-(1:4)])
- 
-  p <- ggplot(dat, aes(x=!!xsyms[[2]], y=!!ysyms[[2]])) +
-    xlab(parse(text=unique(datx$name))) + ylab("") +
-  # PLOT lines
-  geom_linerange(aes(ymin=!!ysyms[[1]], ymax=!!ysyms[[3]]), size=size,
-    alpha=alpha) +
-  geom_linerange(aes(xmin=!!xsyms[[1]], xmax=!!xsyms[[3]]), size=size, 
-    alpha=alpha) +
-  # PLOT median dots
-  geom_point(aes(fill=mp), shape=21, size=4) +
-  facet_wrap(~name, scales="free_y", labeller="label_parsed") +
-  scale_shape(solid=FALSE) + theme(legend.title=element_blank())
+  dat <- cbind(daty, datx[, -(1:4)])
+
+  p <- ggplot(dat, aes(x = !!xsyms[[2]], y = !!ysyms[[2]])) +
+    xlab(parse(text = unique(datx$name))) +
+    ylab("") +
+    # PLOT lines
+    geom_linerange(aes(ymin = !!ysyms[[1]], ymax = !!ysyms[[3]]),
+      linewidth = linewidth,
+      alpha = alpha
+    ) +
+    geom_linerange(aes(xmin = !!xsyms[[1]], xmax = !!xsyms[[3]]),
+      linewidth = linewidth,
+      alpha = alpha
+    ) +
+    # PLOT median dots
+    geom_point(aes(fill = label), shape = 21, size = 4) +
+    facet_wrap(~name, scales = "free_y", labeller = "label_parsed") +
+    scale_shape(solid = FALSE) +
+    theme(legend.title = element_blank())
 
   return(p)
 }
@@ -186,79 +207,124 @@ plotTOs <- function(data, x=unique(data$statistic)[1],
 #' @examples
 #' data(perf)
 #' kobeMPs(perf)
-#' kobeMPs(perf, Ftarget=0.80, SBtarget=0.80)
+#' kobeMPs(perf, Ftarget = 0.80, SBtarget = 0.80)
+kobeMPs <- function(
+  data, x = "SBMSY", y = "FMSY", SBlim = 0.40, Flim = 1.4, Ftarget = NULL,
+  SBtarget = NULL, probs = c(0.10, 0.50, 0.90), size = 0.75, alpha = 1) {
 
-kobeMPs <- function(data, x="SBMSY", y="FMSY", SBlim=0.40, Flim=1.4, Ftarget=NULL,
-  SBtarget=NULL, probs=c(0.10, 0.50, 0.90), size=0.75, alpha=1) {
-  
+  # SET label if missing
+  if (is.null(data[["label"]])) {
+    data[, label := mp]
+  }
+
   # CALCULATE quantiles
-  data <- data[, as.list(quantile(data, probs=probs, na.rm=TRUE)),
-    keyby=list(statistic, name, year, mp)]
+  data <- data[, as.list(quantile(data, probs = probs, na.rm = TRUE)),
+    keyby = list(statistic, name, year, label)]
+
+  # GET probs names
+  xnprobs <- paste0("x", paste0(probs * 100, "%"))
+  ynprobs <- paste0("y", paste0(probs * 100, "%"))
+
+  # SET as symbools
+  xsyms <- syms(xnprobs)
+  ysyms <- syms(ynprobs)
 
   # SUBSET statistics
-  daty <- data[statistic %in% y,]
-  setnames(daty, seq(5, 4 + length(probs)), paste0("y", paste0(probs*100, "%")))
-  datx <- data[statistic %in% x,]
-  setnames(datx, seq(5, 4 + length(probs)), paste0("x", paste0(probs*100, "%")))
+  daty <- data[statistic %in% y, ]
+  setnames(daty, seq(5, 4 + length(probs)), ynprobs)
+  datx <- data[statistic %in% x, ]
+  setnames(datx, seq(5, 4 + length(probs)), xnprobs)
 
   # READJUST limits
-  ylim <- ceiling(max(daty[,"y90%"]) * 2) / 2
-  xlim <- ceiling(max(datx[,"x90%"]) * 2) / 2
+  xlim <- ceiling(max(datx[[xnprobs[length(probs)]]]) * 2) / 2
+  ylim <- ceiling(max(daty[[ynprobs[length(probs)]]]) * 2) / 2
 
   # MERGE x into y
-  data <- cbind(daty, datx[,-(1:4)])
+  data <- cbind(daty, datx[, -(1:4)])
 
   # PLOT
-  p <- ggplot(data, aes(x=`x50%`, y=`y50%`)) +
+  p <- ggplot(data, aes(x = `x50%`, y = `y50%`)) +
     # DRAW Kobe background
-    geom_rect(aes(xmin=1, xmax=Inf, ymin=0, ymax=1), colour='green',
-      fill='green') +
-    geom_rect(aes(xmin=0, xmax=1, ymin=0, ymax=1), colour='yellow',
-      fill='yellow') +
-    geom_rect(aes(xmin=1, xmax=Inf, ymin=1, ymax=Inf), colour='orange', 
-      fill='orange') +
-    geom_rect(aes(xmin=0, xmax=1, ymin=1, ymax=Inf), colour='red',
-      fill='red') +
+    geom_rect(aes(xmin = 1, xmax = Inf, ymin = 0, ymax = 1),
+      colour = "green",
+      fill = "green"
+    ) +
+    geom_rect(aes(xmin = 0, xmax = 1, ymin = 0, ymax = 1),
+      colour = "yellow",
+      fill = "yellow"
+    ) +
+    geom_rect(aes(xmin = 1, xmax = Inf, ymin = 1, ymax = Inf),
+      colour = "orange",
+      fill = "orange"
+    ) +
+    geom_rect(aes(xmin = 0, xmax = 1, ymin = 1, ymax = Inf),
+      colour = "red",
+      fill = "red"
+    ) +
     # DRAW central GRID
-    geom_hline(aes(yintercept=1)) + geom_vline(aes(xintercept=1)) +
+    geom_hline(aes(yintercept = 1)) +
+    geom_vline(aes(xintercept = 1)) +
     # SET lims
     scale_x_continuous(expand = c(0, 0), limits = c(0, xlim)) +
     scale_y_continuous(expand = c(0, 0), limits = c(0, ylim)) +
     # DROP background grid
-    theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-      panel.background = element_blank(), axis.line = element_blank()) +
+    theme(
+      panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+      panel.background = element_blank(), axis.line = element_blank()
+    ) +
     # PLOT lines
-    geom_linerange(aes(ymin=`y10%`, ymax=`y90%`), size=size, alpha=alpha) +
-    geom_linerange(aes(xmin=`x10%`, xmax=`x90%`), size=size, alpha=alpha) +
+    geom_linerange(aes(ymin = !!ysyms[[1]], ymax = !!ysyms[[3]]),
+      size = size, alpha = alpha) +
+    geom_linerange(aes(xmin = !!xsyms[[1]], xmax = !!xsyms[[3]]),
+      size = size, alpha = alpha) +
     # PLOT median dots
-    geom_point(aes(fill=mp), shape=21, size=4) +
-    scale_shape(solid=FALSE) + theme(legend.title=element_blank()) +
+    geom_point(aes(fill = label), shape = 21, size = 4) +
+    scale_shape(solid = FALSE) +
+    theme(legend.title = element_blank()) +
     # LABELS
-    labs(x=expression(SB/SB[MSY]), y=expression(F/F[MSY]))
+    labs(x = expression(SB / SB[MSY]), y = expression(F / F[MSY]))
 
-    # Limit
-    if(!is.null(SBlim) & !is.null(Flim)) {
-      p <- p +
-        geom_segment(aes(x=SBlim, xend=Inf, y=Flim, yend=Flim), colour='gray') +
-        geom_segment(aes(x=SBlim, xend=SBlim, y=0, yend=Flim), colour='gray') +
-        annotate("text", x = SBlim, y = 0.10, hjust=-0.10, 
-          label = "SB[lim]", parse=TRUE) +
-        annotate("text", x = xlim * 0.90, y = Flim, vjust=-0.10,
-          label = "F[lim]", parse=TRUE)
-    }
-    
-    # Target
-    if(!is.null(SBtarget) & !is.null(Ftarget)) {
-      p <- p +
-        geom_segment(aes(x=SBtarget, xend=Inf, y=Ftarget, yend=Ftarget),
-          size=0.25, linetype=2) +
-          geom_segment(aes(x=SBtarget, xend=SBtarget, y=0, yend=Ftarget),
-          size=0.25, linetype=2) +
-        annotate("text", x = SBtarget, y = 0.10, hjust=-0.10,
-          label = "SB[targ]", parse=TRUE) +
-        annotate("text", x =  xlim * 0.90, y = Ftarget, vjust=-0.10,
-          label = "F[targ]", parse=TRUE)
-    }
+  # Limit
+  if (!is.null(SBlim) & !is.null(Flim)) {
+    p <- p +
+      annotate(
+        geom = "segment", x = SBlim, xend = Inf, y = Flim, yend = Flim,
+        colour = "gray"
+      ) +
+      annotate(
+        geom = "segment", x = SBlim, xend = SBlim, y = 0, yend = Flim,
+        colour = "gray"
+      ) +
+      annotate("text",
+        x = SBlim, y = 0.10, hjust = -0.10,
+        label = "SB[lim]", parse = TRUE
+      ) +
+      annotate("text",
+        x = xlim * 0.90, y = Flim, vjust = -0.10,
+        label = "F[lim]", parse = TRUE
+      )
+  }
+
+  # Target
+  if (!is.null(SBtarget) & !is.null(Ftarget)) {
+    p <- p +
+      annotate(
+        geom = "segment", x = SBtarget, xend = Inf, y = Ftarget, yend = Ftarget,
+        size = 0.25, linetype = 2
+      ) +
+      annotate(
+        geom = "segment", x = SBtarget, xend = SBtarget, y = 0, yend = Ftarget,
+        size = 0.25, linetype = 2
+      ) +
+      annotate("text",
+        x = SBtarget, y = 0.10, hjust = -0.10,
+        label = "SB[targ]", parse = TRUE
+      ) +
+      annotate("text",
+        x = xlim * 0.90, y = Ftarget, vjust = -0.10,
+        label = "F[targ]", parse = TRUE
+      )
+  }
 
   return(p)
 } # }}}
@@ -267,61 +333,160 @@ kobeMPs <- function(data, x="SBMSY", y="FMSY", SBlim=0.40, Flim=1.4, Ftarget=NUL
 
 kobeTS <- function(perfts) {
 
-  ggplot(perfts, aes(x=ISOdate(year, 1, 1), y=data, fill=statistic)) + 
-    geom_col(colour="black", size=0.5) +
-    scale_discrete_manual(name = "Kobe Quadrant", aesthetics=c("fill"),
-      values=c(green="darkgreen", red="red", yellow="yellow2", orange="orange")) +
-    facet_wrap(~mp) +
-    xlab("") + ylab("") +
-    theme(legend.position=c(.85,.15))
+  ggplot(perfts, aes(x = ISOdate(year, 1, 1), y = data, fill = statistic)) +
+    geom_col(colour = "black") +
+    scale_discrete_manual(
+      name = "Kobe Quadrant", aesthetics = c("fill"),
+      values = c(
+        green = "darkgreen", red = "red", yellow = "yellow2",
+        orange = "orange"
+      )
+    ) +
+    facet_wrap(~label) +
+    xlab("") +
+    ylab("") +
+    theme(legend.position = c(.85, .15)) +
+    scale_y_continuous(labels = scales::percent)
 
 } # }}}
+
+# plotTimeSeries {{{
+
+plotTimeSeries <- function(dat, statistics = c("SB", "C", "HRMSY")) {
+
+  # SET label if missing
+  if (!"label" %in% colnames(dat)) {
+    dat[, label := mp]
+  }
+
+  # GET dims
+  yrs <- dat[mp != "", unique(year)]
+  yr <- yrs[floor(length(yrs) / 2)]
+
+  # EXTRACT statistics
+  dat <- dat[statistic %in% statistics, ]
+
+  # CONSTRUCT plot
+  p <- ggplot(dat, aes(x = ISOdate(year, 1, 1), y = data, group = label)) +
+    geom_flquantiles(aes(fill = label, colour = label),
+      probs = c(0.1, 0.50, 0.90),
+      alpha = 0.1
+    ) +
+    geom_flquantiles(aes(fill = label, colour = label),
+      probs = c(0.25, 0.50, 0.75),
+      alpha = 0.2
+    ) +
+    facet_grid(statistic ~ ., scales = "free") +
+    xlab("") +
+    ylab("")
+
+  # ADD line at strat of MP years
+  p <- p + geom_vline(xintercept = ISOdate(yrs[1], 1, 1), linetype = 4, alpha = 0.3)
+
+  # SUBSET data for labels
+  labdat <- p$data[mp != ""][year == yr, .(
+    year = unique(ISOdate(year, 1, 1)),
+    data = median(data)
+  ), by = .(label, statistic)]
+
+  # ADD labels
+  if (length(statistics) == 1) {
+    p <- p + geom_label_repel(data = labdat, aes(
+      x = year, y = data,
+      label = label, colour = label
+    ), alpha = 0.7) +
+      theme(legend.position = "none", legend.title = element_blank())
+  } else {
+    p <- p + theme(legend.position = "bottom", legend.title = element_blank()) +
+      guides(fill = guide_legend(nrow = 1))
+  }
+
+  return(p)
+}
+# }}}
+
+# plotTSPanel {{{
+
+plotTSPanel <- function(dat, metric = c("SB")) {
+  # EXTRACT metrics
+  dat <- dat[statistic %in% metric, ]
+
+  # SEPARATE periods
+  da0 <- dat[mp == "", ]
+  da1 <- dat[mp != ""]
+
+  # SORT da1 by type, mp
+
+  p0 <- ggplot(da0, aes(x = ISOdate(year, 1, 1), y = data, group = mp)) +
+    geom_flquantiles(fill = "grey", probs = c(0.1, 0.50, 0.90), alpha = 0.2) +
+    geom_flquantiles(fill = "grey", probs = c(0.25, 0.50, 0.75), alpha = 0.5) +
+    xlab("") +
+    ylab(metric)
+
+  p1 <- ggplot(da1, aes(x = ISOdate(year, 1, 1), y = data, group = mp)) +
+    geom_flquantiles(aes(fill = type), probs = c(0.1, 0.50, 0.90), alpha = 0.2) +
+    geom_flquantiles(aes(fill = type), probs = c(0.25, 0.50, 0.75), alpha = 0.5) +
+    facet_wrap(~label, ncol = 2) +
+    xlab("") +
+    ylab(metric)
+
+  p0 / p1
+}
+# }}}
+
+# - PLOT from classes
 
 # plotOMruns {{{
 
-plotOMruns <- function(om, runs, limit=missing, target=missing, iter=NULL,
-  probs=c(0.10, 0.25, 0.50, 0.75, 0.90), iyear=dims(om)$maxyear,
-  ylab="", ylim="missing") {
-
+plotOMruns <- function(
+  om, runs, limit = missing, target = missing, iter = NULL,
+  probs = c(0.10, 0.25, 0.50, 0.75, 0.90), iyear = dims(om)$maxyear,
+  ylab = "", ylim = "missing"
+) {
   # CHECK classses
-  if(!is(om, "FLQuant") | !is(runs, "FLQuants"))
+  if (!is(om, "FLQuant") | !is(runs, "FLQuants")) {
     stop("om and runs must be of class FLQuant and FLQuants respectively.")
- 
+  }
+
   # PLOT om
-  p1 <- ggplotFL::plot(om, probs=probs) + xlim(NA, iyear + 1) +
-    geom_vline(xintercept=iyear)
+  p1 <- ggplotFL::plot(om, probs = probs) + xlim(NA, iyear + 1) +
+    geom_vline(xintercept = iyear)
 
   # RPs
-  if(!missing(limit))
-    p1 <- p1 + geom_hline(aes(yintercept=limit), colour="red", linetype=2)
-  if(!missing(target))
-    p1 <- p1 + geom_hline(aes(yintercept=target), colour="green", linetype=2)
+  if (!missing(limit)) {
+    p1 <- p1 + geom_hline(aes(yintercept = limit), colour = "red", linetype = 2)
+  }
+  if (!missing(target)) {
+    p1 <- p1 + geom_hline(aes(yintercept = target), colour = "green", linetype = 2)
+  }
 
   # iters
-  if(length(iter) == 1) {
+  if (length(iter) == 1) {
     iter <- unname(unlist(lapply(quantile(c(om[, ac(dims(om)$maxyear)]),
-      probs=seq(0.05, 0.95, length=iter)), function(i)
-      which.min(abs(c(om[, ac(dims(om)$maxyear)]) - i)))))
+      probs = seq(0.05, 0.95, length = iter)
+    ), function(i) {
+      which.min(abs(c(om[, ac(dims(om)$maxyear)]) - i))
+    })))
   }
 
   # PLOT mps
-  p2 <- ggplotFL::plot(runs, probs=probs, iter=iter) +
-    facet_wrap(~qname, ncol=2, dir="v") +
-    ylab(ylab) + geom_vline(xintercept=iyear)
+  p2 <- ggplotFL::plot(runs, probs = probs, iter = iter) +
+    facet_wrap(~qname, ncol = 2, dir = "v") +
+    ylab(ylab) + geom_vline(xintercept = iyear)
 
   # RPs
-  if(!missing(limit))
-    p2 <- p2 + geom_hline(aes(yintercept=limit), colour="red", linetype=2)
-  if(!missing(target))
-    p2 <- p2 + geom_hline(aes(yintercept=target), colour="green", linetype=2)
+  if (!missing(limit)) {
+    p2 <- p2 + geom_hline(aes(yintercept = limit), colour = "red", linetype = 2)
+  }
+  if (!missing(target)) {
+    p2 <- p2 + geom_hline(aes(yintercept = target), colour = "green", linetype = 2)
+  }
 
-  if(!missing(ylim))
-    p2 <- p2 + coord_cartesian(ylim=ylim)
-  
-  p <- p1 + p2 + plot_layout(ncol=1, heights=c(1, length(runs) / 2))
+  if (!missing(ylim)) {
+    p2 <- p2 + coord_cartesian(ylim = ylim)
+  }
+
+  p <- p1 + p2 + plot_layout(ncol = 1, heights = c(1, length(runs) / 2))
 
   return(p)
-
 } # }}}
-
-# plotPerformance

@@ -1,0 +1,11 @@
+---
+title: "Visualization for MSE with *mseviz*"
+author: "Iagio Mosqueira (WMR)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mseviz}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
