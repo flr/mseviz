@@ -329,30 +329,43 @@ kobeMPs <- function(
   return(p)
 } # }}}
 
-# kobeTS {{{
+# kobeTimeSeries {{{
 
-kobeTS <- function(perfts) {
+kobeTimeSeries <- function(perfts) {
 
+  # SUBSET Kobe stats
+  perfts <- perfts[statistic %in% c("green", "red", "yellow2", "orange")]
+
+  # PLO
   ggplot(perfts, aes(x = ISOdate(year, 1, 1), y = data, fill = statistic)) +
-    geom_col(colour = "black") +
+    geom_col(position="fill") +
+    # geom_tile(position="fill") +
+    # geom_vline(aes(xintercept=ISOdate(year, 1, 1)), colour="grey", alpha=0.5) +
     scale_discrete_manual(
       name = "Kobe Quadrant", aesthetics = c("fill"),
       values = c(
         green = "darkgreen", red = "red", yellow = "yellow2",
-        orange = "orange"
-      )
-    ) +
+        orange = "orange"),
+      # TODO: ADD logical AND symbol \u2227
+      labels = c(
+        green = expression("P("*B>B[MSY]~"\U2227"~F<F[MSY]*")"),
+        red = expression("P("*B<B[MSY]~"\U2227"~F>F[MSY]*")"),
+        yellow = expression("P("*B<B[MSY]~"\U2227"~F<F[MSY]*")"),
+        orange = expression("P("*B>B[MSY]~"\U2227"~F>F[MSY]*")"))) +
     facet_wrap(~label) +
     xlab("") +
     ylab("") +
-    theme(legend.position = c(.85, .15)) +
+    # theme(legend.position = c(.85, .15)) +
+    theme(legend.position = "bottom", 
+    legend.justification = "left") +
     scale_y_continuous(labels = scales::percent)
 
 } # }}}
 
 # plotTimeSeries {{{
 
-plotTimeSeries <- function(dat, statistics = c("SB", "C", "HRMSY")) {
+plotTimeSeries <- function(dat, statistics = c("SB", "R", "C", "HRMSY"), 
+  worms=NULL) {
 
   # SET label if missing
   if (!"label" %in% colnames(dat)) {
@@ -366,6 +379,9 @@ plotTimeSeries <- function(dat, statistics = c("SB", "C", "HRMSY")) {
   # EXTRACT statistics
   dat <- dat[statistic %in% statistics, ]
 
+  # SET ORDER as in argument
+  dat[, statistic := factor(statistic, levels=statistics)]
+
   # CONSTRUCT plot
   p <- ggplot(dat, aes(x = ISOdate(year, 1, 1), y = data, group = label)) +
     geom_flquantiles(aes(fill = label, colour = label),
@@ -376,12 +392,30 @@ plotTimeSeries <- function(dat, statistics = c("SB", "C", "HRMSY")) {
       probs = c(0.25, 0.50, 0.75),
       alpha = 0.2
     ) +
-    facet_grid(statistic ~ ., scales = "free") +
+    facet_grid(name ~ ., scales = "free", labeller = label_parsed) +
     xlab("") +
     ylab("")
 
-  # ADD line at strat of MP years
-  p <- p + geom_vline(xintercept = ISOdate(yrs[1], 1, 1), linetype = 4, alpha = 0.3)
+  # SAMPLE 5 iters if worms=TRUE
+  if(isTRUE(worms)) {
+    worms <- sample(dat[, unique(iter)], 5)
+  # or SAMPLE worms if single value
+  } else if (is.numeric(worms) & length(worms) == 1) {
+    worms <- sample(dat[, unique(iter)], worms)
+  }
+
+  # ADD worms by om
+  if(is.numeric(worms) | is.character(worms)) {
+    p <- p + geom_line(data=dat[iter %in% worms],
+      aes(group=interaction(label, iter), colour=iter), alpha=0.2,
+      show.legend=FALSE) +
+      # EXCLUDE iters in worms from legend
+      scale_color_discrete(breaks = unique(p$data$label))
+  }
+
+  # ADD line at start of MP years
+  p <- p + geom_vline(xintercept = ISOdate(yrs[1], 1, 1),
+    linetype = 4, alpha = 0.3)
 
   # SUBSET data for labels
   labdat <- p$data[mp != ""][year == yr, .(
@@ -389,7 +423,7 @@ plotTimeSeries <- function(dat, statistics = c("SB", "C", "HRMSY")) {
     data = median(data)
   ), by = .(label, statistic)]
 
-  # ADD labels
+  # TEST: ADD labels
   if (length(statistics) == 1) {
     p <- p + geom_label_repel(data = labdat, aes(
       x = year, y = data,
@@ -397,8 +431,8 @@ plotTimeSeries <- function(dat, statistics = c("SB", "C", "HRMSY")) {
     ), alpha = 0.7) +
       theme(legend.position = "none", legend.title = element_blank())
   } else {
-    p <- p + theme(legend.position = "bottom", legend.title = element_blank()) +
-      guides(fill = guide_legend(nrow = 1))
+    p <- p + guides(colour = guide_legend(title="", position="bottom",
+      nrow = 1))
   }
 
   return(p)
