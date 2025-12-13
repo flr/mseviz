@@ -364,7 +364,7 @@ kobeTimeSeries <- function(perfts) {
 
 # plotTimeSeries {{{
 
-plotTimeSeries <- function(dat, statistics = c("SB", "R", "C", "HRMSY"), 
+plotTimeSeries <- function(dat, statistics = c("SB", "R", "C", "F"), 
   worms=NULL) {
 
   # SET label if missing
@@ -379,8 +379,9 @@ plotTimeSeries <- function(dat, statistics = c("SB", "R", "C", "HRMSY"),
   # EXTRACT statistics
   dat <- dat[statistic %in% statistics, ]
 
-  # SET ORDER as in argument
-  dat[, statistic := factor(statistic, levels=statistics)]
+  # SET name as factior with levels as in 'statistics' argument
+  levs <- dat[statistic %in% statistics, .SD[1], by=statistic][, .(statistic, name)]
+  dat[, name := factor(name, levels=setNames(levs$name, nm=levs$statistic)[statistics])]
 
   # CONSTRUCT plot
   p <- ggplot(dat, aes(x = ISOdate(year, 1, 1), y = data, group = label)) +
@@ -431,8 +432,9 @@ plotTimeSeries <- function(dat, statistics = c("SB", "R", "C", "HRMSY"),
     ), alpha = 0.7) +
       theme(legend.position = "none", legend.title = element_blank())
   } else {
-    p <- p + guides(colour = guide_legend(title="", position="bottom",
-      nrow = 1))
+    p <- p +
+      guides(colour = guide_legend(title="", position="bottom", nrow = 1)) +
+      theme(legend.title = element_blank())
   }
 
   return(p)
