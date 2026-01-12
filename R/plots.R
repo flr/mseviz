@@ -14,9 +14,9 @@
 #' Figure 3
 #' @examples
 #' data(perf)
-# A data.table of performance statistics per run,
+#' # A data.table of performance statistics per run,
 #' head(perf)
-# plot selected statistics
+#' # plot selected statistics
 #' plotBPs(perf, statistics = c("SB0", "FMSY", "green"))
 #' # Use FLR's own colourblind-friendly palette
 #' plotBPs(perf, statistics = c("SB0", "FMSY", "green")) +
@@ -43,6 +43,12 @@ plotBPs <- function(
   data, statistics = unique(data$statistic), size = 3,
   target = missing, limit = missing, reference = missing,
   yminmax = c(0.10, 0.90), lowupp = c(0.25, 0.75), show.mean = NULL) {
+
+  # check single year 
+  if(length(data[, unique(year)]) > 1)
+    stop("plotBPs currently only works for a single 'year', please subset or aggregate")
+    # data <- data[, .(data=mean(data)), by=.(om, statistic, name, desc, iter,
+    #   type, run, mp, label)]
 
   # CHECK quantiles
   if (any(c(length(yminmax), length(lowupp)) != 2)) {
@@ -88,6 +94,8 @@ plotBPs <- function(
   p <- ggplot(dat, aes(x = label, ymin = ymin, lower = lower, middle = middle,
       upper = upper, ymax = ymax, fill = label, group=label)) +
     # data ~ label, colour by label
+    # PLOT boxplot by label
+    geom_boxplot(stat = "identity") +
     # PLOT point by label, useful if boxplot is very thin
     geom_point(data = dat[, .(middle = mean(middle)), by = .(label, name)],
       aes(x = label, y = middle), colour = "black", size = size * 1.20,
@@ -95,8 +103,6 @@ plotBPs <- function(
     geom_point(data = dat[, .(middle = mean(middle)), by = .(label, name)],
       aes(x = label, y = middle, fill = label, colour = NULL), shape = 21, size = size,
       inherit.aes = FALSE) +
-    # PLOT boxplot by label
-    geom_boxplot(stat = "identity") +
     # PANELS per statistics
     facet_wrap(~name, scales = "free_y", labeller = "label_parsed") +
     # DELETE axis labels, LEGEND in 6th panel
@@ -105,6 +111,8 @@ plotBPs <- function(
     theme(axis.text.x = element_blank(), legend.position = c("right"),
       # DELETE legend title
       legend.title = element_blank())
+
+  # TODO: ADD white and dotted line at median (mean) for show.mean facets
 
   # TARGET
   if (!missing(target)) {
@@ -334,7 +342,12 @@ kobeMPs <- function(
 kobeTimeSeries <- function(perfts) {
 
   # SUBSET Kobe stats
-  perfts <- perfts[statistic %in% c("green", "red", "yellow2", "orange")]
+  perfts <- perfts[statistic %in% c("green", "yellow", "orange", "red")]
+
+  perfts[, statistic := factor(statistic, levels=c("green", "yellow", "orange", "red"))]
+
+  # No. of labels
+  nlab <- perfts[, length(unique(label))]
 
   # PLO
   ggplot(perfts, aes(x = ISOdate(year, 1, 1), y = data, fill = statistic)) +
@@ -349,15 +362,15 @@ kobeTimeSeries <- function(perfts) {
       # TODO: ADD logical AND symbol \u2227
       labels = c(
         green = expression("P("*B>B[MSY]~"\U2227"~F<F[MSY]*")"),
-        red = expression("P("*B<B[MSY]~"\U2227"~F>F[MSY]*")"),
         yellow = expression("P("*B<B[MSY]~"\U2227"~F<F[MSY]*")"),
-        orange = expression("P("*B>B[MSY]~"\U2227"~F>F[MSY]*")"))) +
+        orange = expression("P("*B>B[MSY]~"\U2227"~F>F[MSY]*")"),
+        red = expression("P("*B<B[MSY]~"\U2227"~F>F[MSY]*")"))) +
     facet_wrap(~label) +
     xlab("") +
     ylab("") +
     # theme(legend.position = c(.85, .15)) +
     theme(legend.position = "bottom", 
-    legend.justification = "left") +
+    legend.justification = ifelse(nlab == 1, "left", "center")) +
     scale_y_continuous(labels = scales::percent)
 
 } # }}}
@@ -444,8 +457,9 @@ plotTimeSeries <- function(dat, statistics = c("SB", "R", "C", "F"),
 # plotTSPanel {{{
 
 plotTSPanel <- function(dat, metric = c("SB")) {
-  # EXTRACT metrics
-  dat <- dat[statistic %in% metric, ]
+
+  # EXTRACT metric
+  dat <- dat[statistic == metric, ]
 
   # SEPARATE periods
   da0 <- dat[mp == "", ]
@@ -466,8 +480,10 @@ plotTSPanel <- function(dat, metric = c("SB")) {
     xlab("") +
     ylab(metric)
 
-  p0 / p1
+  return(p0 / p1)
+
 }
+
 # }}}
 
 # - PLOT from classes
