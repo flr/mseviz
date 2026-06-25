@@ -61,7 +61,8 @@ plotBPs <- function(
   }
 
   # ORDER label as in input
-  data[, label := factor(label, levels = unique(label))]
+  if (!is.factor(data$label))
+    data[, label := factor(label, levels = unique(label))]
   
   # SUBSET statistics
   data <- data[statistic %in% statistics, ]
@@ -101,8 +102,8 @@ plotBPs <- function(
       aes(x = label, y = middle), colour = "black", size = size * 1.20,
       inherit.aes = FALSE) +
     geom_point(data = dat[, .(middle = mean(middle)), by = .(label, name)],
-      aes(x = label, y = middle, fill = label, colour = NULL), shape = 21, size = size,
-      inherit.aes = FALSE) +
+      aes(x = label, y = middle, fill = label, colour = NULL), shape = 21,
+      size = size, inherit.aes = FALSE) +
     # PANELS per statistics
     facet_wrap(~name, scales = "free_y", labeller = "label_parsed") +
     # DELETE axis labels, LEGEND in 6th panel
@@ -168,7 +169,8 @@ plotTOs <- function(  data, x = unique(data$statistic)[1],
   }
 
   # ORDER label as in input
-  data[, label := factor(label, levels = unique(label))]
+  if (!is.factor(data$label))
+    data[, label := factor(label, levels = unique(label))]
   
   # CALCULATE quantiles
   data <- data[, as.list(quantile(data, probs = probs, na.rm = TRUE)),
