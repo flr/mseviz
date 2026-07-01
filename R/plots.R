@@ -191,7 +191,7 @@ plotTOs <- function(  data, x = unique(data$statistic)[1],
   dat <- cbind(daty, datx[, -(1:4)])
 
   p <- ggplot(dat, aes(x = !!xsyms[[2]], y = !!ysyms[[2]])) +
-    xlab(parse(text = unique(datx$name))) +
+    xlab(parse(text = paste0('"', unique(datx$name), '"'))) +
     ylab("") +
     # PLOT lines
     geom_linerange(aes(ymin = !!ysyms[[1]], ymax = !!ysyms[[3]]),
