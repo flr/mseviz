@@ -103,7 +103,7 @@ resTable <- function(data, statistics=unique(data[['statistic']]), ...) {
 # plot_perfTable {{{
 
 plot_perfTable <- function(dt, row_var = "statistic", col_var = "label",
-  value_var = "data", label_var = "name", highest_best = TRUE,
+  value_var = "data", label_var = "name", highest_best = TRUE, values_best = 2,
   shade_color = "#2ca02c", fill_na = "grey97", show_mad = TRUE,
   category_var = NULL) {
 
@@ -139,10 +139,9 @@ plot_perfTable <- function(dt, row_var = "statistic", col_var = "label",
   #  - an unnamed character vector of label_var ("name") values: those names
   #    are treated as "highest is best", every other name as "lowest is best"
   if (is.character(highest_best)) {
-    name_vals <- unique(smry$row_label)
-    dir_vec   <- setNames(rep(FALSE, length(name_vals)), name_vals)
+    dir_vec <- setNames(rep(FALSE, length(row_vals)), row_vals)
     dir_vec[names(dir_vec) %in% highest_best] <- TRUE
-    dir_key   <- "row_label"
+    dir_key <- row_var
   } else if (length(highest_best) == 1L || is.null(names(highest_best))) {
     dir_vec <- setNames(rep(as.logical(highest_best[1L]), length(row_vals)),
                         row_vals)
@@ -160,10 +159,11 @@ plot_perfTable <- function(dt, row_var = "statistic", col_var = "label",
   # COMPUTE direction-aware rank within each row, 1 = best
   smry[, signed_med := ifelse(direction, -med, med)]
   smry[, rank_val   := frank(signed_med, ties.method = "min"), by = row_var]
-  smry[, rank_grp   := fifelse(rank_val <= 3, as.character(rank_val), "none")]
-  smry[, rank_grp   := factor(rank_grp, levels = c("1", "2", "3", "none"))]
+  smry[, rank_grp := fifelse(rank_val <= values_best, as.character(rank_val), "none")]
+  smry[, rank_grp := factor(rank_grp, levels = c(as.character(seq_len(values_best)), 
+    "none"))]
 
-  # SET fornmat decimals
+    # SET fornmat decimals
   fmt <- function(x) {
     out <- character(length(x))
     a   <- abs(x)
@@ -195,28 +195,76 @@ plot_perfTable <- function(dt, row_var = "statistic", col_var = "label",
     smry[, category_f := factor(category_lb, levels = unique(category_lb))]
   }
 
-  # COLOUR ramp for ranks 1-3, with luminance-based text colour
+  # COLOUR ramp for ranks 1-values_best, with luminance-based text colour
   # rank "1" (best) gets the darkest shade; shade_color = NA disables shading
   if (isFALSE(shade_color)) {
-    fill_values <- c("1" = fill_na, "2" = fill_na, "3" = fill_na, "none" = fill_na)
+    fill_values <- c(setNames(rep(fill_na, values_best),
+      as.character(seq_len(values_best))), "none" = fill_na)
   } else {
-    ramp        <- grDevices::colorRampPalette(c(shade_color, "white"))(5L)[1:3]
-    fill_values <- c("1" = ramp[1], "2" = ramp[2], "3" = ramp[3], "none" = fill_na)
+    ramp <- grDevices::colorRampPalette(c(shade_color, "white"))(values_best)
+    fill_values <- c(setNames(ramp, as.character(seq_len(values_best))),
+                   "none" = fill_na)
   }
 
-  # relative luminance (WCAG-style) -> decide white vs black text per fill
-  luminance <- function(hex) {
-    rgb_mat <- grDevices::col2rgb(hex) / 255
-    lin     <- apply(rgb_mat, 2, function(ch) {
-      ifelse(ch <= 0.03928, ch / 12.92, ((ch + 0.055) / 1.055)^2.4)
-    })
-    0.2126 * lin[1, ] + 0.7152 * lin[2, ] + 0.0722 * lin[3, ]
-  }
-  text_col_lookup <- setNames(
-    ifelse(luminance(fill_values) < 0.45, "white", "black"),
-    names(fill_values)
+# relative luminance (WCAG-style)
+luminance <- function(hex) {
+  rgb_mat <- grDevices::col2rgb(hex) / 255
+  lin <- apply(rgb_mat, 2, function(ch) {
+    ifelse(ch <= 0.03928, ch / 12.92, ((ch + 0.055) / 1.055)^2.4)
+  })
+  as.numeric(0.2126 * lin[1, ] + 0.7152 * lin[2, ] + 0.0722 * lin[3, ])
+}
+
+# helper: blend two colours in RGB space (t in [0,1])
+blend_hex <- function(col1, col2 = "white", t = 0.5) {
+  a <- grDevices::col2rgb(col1)
+  b <- grDevices::col2rgb(col2)
+  m <- round((1 - t) * a + t * b)
+  grDevices::rgb(m[1], m[2], m[3], maxColorValue = 255)
+}
+
+if (isFALSE(shade_color)) {
+  fill_values <- c(
+    setNames(rep(fill_na, values_best), as.character(seq_len(values_best))),
+    "none" = fill_na
   )
-  smry[, text_col := text_col_lookup[as.character(rank_grp)]]
+} else {
+  # choose luminance spacing by number of ranks:
+  # fewer ranks -> larger spacing; more ranks -> finer spacing
+  L0 <- luminance(shade_color)
+  Lmax <- 0.92
+  min_delta <- 0.12
+  target_end <- min(Lmax, L0 + max(min_delta, 0.55 / max(1, values_best - 1)))
+
+  target_L <- if (values_best == 1L) L0 else seq(L0, target_end, length.out = values_best)
+
+  # find blend-to-white factor t to hit each target luminance
+  get_t_for_L <- function(Lt, base_col) {
+    f <- function(t) luminance(blend_hex(base_col, "white", t)) - Lt
+    lo <- 0; hi <- 1
+    flo <- f(lo); fhi <- f(hi)
+    if (flo >= 0) return(0)
+    if (fhi <= 0) return(1)
+    uniroot(f, c(lo, hi), tol = 1e-4)$root
+  }
+
+  ts <- vapply(target_L, get_t_for_L, numeric(1), base_col = shade_color)
+  ramp <- vapply(ts, function(t) blend_hex(shade_color, "white", t), character(1))
+
+  fill_values <- c(
+    setNames(ramp, as.character(seq_len(values_best))),
+    "none" = fill_na
+  )
+}
+
+text_col_lookup <- setNames(
+  ifelse(luminance(fill_values) < 0.45, "white", "black"),
+  names(fill_values)
+)
+smry[, text_col := text_col_lookup[as.character(rank_grp)]]
+
+
+
 
   # BUILD plot
 

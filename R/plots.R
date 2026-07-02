@@ -39,8 +39,7 @@
 #'     "#f70e4a", "#fa537d", "#fc98b1",
 #'     "#1189af", "#30beeb", "#83d8f3"
 #'   ))
-plotBPs <- function(
-  data, statistics = unique(data$statistic), size = 3,
+plotBPs <- function(data, statistics = unique(data$statistic), size = 3,
   target = missing, limit = missing, reference = missing,
   yminmax = c(0.10, 0.90), lowupp = c(0.25, 0.75), show.mean = NULL) {
 
@@ -77,7 +76,7 @@ plotBPs <- function(
     middle = median(data, na.rm = TRUE),
     upper = quantile(data, lowupp[2], na.rm = TRUE),
     ymax = quantile(data, yminmax[2], na.rm = TRUE)),
-  by = .(label, statistic, name, year)]
+  by = .(label, statistic, name, year, biol)]
 
   # MERGE name + year if needed
   id <- dat[, length(unique(year)) == 2, by = name]
@@ -104,14 +103,18 @@ plotBPs <- function(
     geom_point(data = dat[, .(middle = mean(middle)), by = .(label, name)],
       aes(x = label, y = middle, fill = label, colour = NULL), shape = 21,
       size = size, inherit.aes = FALSE) +
-    # PANELS per statistics
-    facet_wrap(~name, scales = "free_y", labeller = "label_parsed") +
     # DELETE axis labels, LEGEND in 6th panel
     xlab("") + ylab("") +
     # TODO legend pos by no. of panels
     theme(axis.text.x = element_blank(), legend.position = c("right"),
       # DELETE legend title
       legend.title = element_blank())
+
+    # PANELS per statistics
+  if(length(unique(dat$biol)) == 1)
+    p <- p + facet_wrap(~name, scales = "free", labeller = "label_parsed")
+  else
+    p <- p + facet_grid(name~biol, scales = "free", labeller = "label_parsed")
 
   # TODO: ADD white and dotted line at median (mean) for show.mean facets
 
